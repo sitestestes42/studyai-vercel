@@ -1,0 +1,8 @@
+{
+  "name": "studyai",
+  "version": "2.0.0",
+  "description": "StudyAI - Sua IA de Estudos",
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  }
+}
