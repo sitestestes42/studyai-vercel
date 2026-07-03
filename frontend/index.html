@@ -2,22 +2,19 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>StudyAI – Sua IA de Estudos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SiriusLearn – Sua IA de Estudos</title>
     <link rel="stylesheet" href="style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <!-- ============================================ -->
-    <!-- TELA DE LOGIN -->
-    <!-- ============================================ -->
     <div id="tela-login" class="tela-login">
         <div class="login-container">
             <div class="login-logo">📚</div>
-            <h1>Study<span>AI</span></h1>
-            <p class="login-subtitle">Sua IA pessoal para estudos</p>
+            <h1>Sirius<span>Learn</span></h1>
+            <p class="login-subtitle">Sua IA de estudos</p>
             <div class="login-card">
                 <input type="email" id="login-email" placeholder="Seu e-mail" />
                 <input type="password" id="login-senha" placeholder="Sua senha" />
@@ -30,20 +27,15 @@
                 </div>
                 <p class="login-hint" id="login-mensagem"></p>
             </div>
-            <div class="login-footer"><span>✨ Gratuito • StudyAI v2.0</span></div>
+            <div class="login-footer"><span>✨ Gratuito • SiriusLearn</span></div>
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- APLICATIVO PRINCIPAL -->
-    <!-- ============================================ -->
     <div id="app-principal" style="display:none;">
-
-        <!-- TOP BAR -->
         <header class="top-bar">
             <div class="top-bar-left">
                 <button id="btn-menu-toggle" class="btn-menu">☰</button>
-                <div class="logo-small">📚 Study<span>AI</span></div>
+                <div class="logo-small">📚 Sirius<span>Learn</span></div>
             </div>
             <div class="top-bar-center">
                 <span class="user-greeting" id="saudacao-topo">Olá, <strong>Usuário</strong> 🌟</span>
@@ -54,13 +46,10 @@
             </div>
         </header>
 
-        <!-- CORPO PRINCIPAL -->
         <div class="app-body">
-
-            <!-- DRAWER LATERAL (MENU) -->
             <aside id="drawer" class="drawer">
                 <div class="drawer-header">
-                    <h3>📚 Study<span>AI</span></h3>
+                    <h3>📚 Sirius<span>Learn</span></h3>
                     <button id="btn-close-drawer" class="btn-close-drawer">✕</button>
                 </div>
                 <div class="drawer-conversas">
@@ -85,30 +74,39 @@
                 </div>
             </aside>
 
-            <!-- OVERLAY PARA FECHAR DRAWER -->
             <div id="drawer-overlay" class="drawer-overlay"></div>
 
-            <!-- CONTEÚDO PRINCIPAL -->
             <main class="main-content">
 
-                <!-- TAB: CHAT -->
                 <section id="tab-chat" class="tab-content active">
                     <div class="chat-container">
+                        <div class="chat-header">
+                            <div class="chat-header-left">
+                                <h2>💬 SiriusLearn</h2>
+                                <span class="chat-status">🟢 Online</span>
+                            </div>
+                            <div class="chat-header-right">
+                                <select id="perfil-select">
+                                    <option value="professor">👨‍🏫 Professor</option>
+                                    <option value="tutor" selected>📚 Tutor</option>
+                                    <option value="coach">🚀 Coach</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chat-toolbar">
+                            <button id="btn-upload-pdf" title="Enviar PDF" class="toolbar-btn">📎</button>
+                            <button id="btn-gerar-pdf" title="Gerar PDF" class="toolbar-btn">📄</button>
+                            <button id="btn-gerar-resumo" title="Gerar Resumo" class="toolbar-btn">📊</button>
+                            <button id="btn-gerar-csv" title="Gerar Planilha" class="toolbar-btn">📋</button>
+                        </div>
                         <div id="chat-mensagens" class="chat-mensagens"></div>
                         <div class="chat-input-area">
-                            <input type="text" id="chat-input" placeholder="Pergunte qualquer coisa..." />
-                            <button id="btn-chat-enviar">📨</button>
-                        </div>
-                        <div class="chat-sugestoes" id="chat-sugestoes">
-                            <span onclick="enviarPergunta('Me explique sobre células')">🧬 Células</span>
-                            <span onclick="enviarPergunta('O que é equação de 1º grau?')">📐 Equação 1º grau</span>
-                            <span onclick="enviarPergunta('Resumo sobre a Revolução Francesa')">🇫🇷 Revolução Francesa</span>
-                            <span onclick="enviarPergunta('Função dos ribossomos')">🧫 Ribossomos</span>
+                            <input type="text" id="chat-input" placeholder="Digite sua mensagem..." />
+                            <button id="btn-chat-enviar">→</button>
                         </div>
                     </div>
                 </section>
 
-                <!-- TAB: ESTUDO -->
                 <section id="tab-estudo" class="tab-content">
                     <h1>⏱️ Sessão de Estudo</h1>
                     <p class="subtitle">Foque, estude e no final a IA gera flashcards e quiz.</p>
@@ -128,14 +126,12 @@
                     </div>
                 </section>
 
-                <!-- TAB: FLASHCARDS -->
                 <section id="tab-flashcards" class="tab-content">
                     <h1>🃏 Flashcards</h1>
                     <p class="subtitle">Revisão espaçada – revise hoje!</p>
                     <div id="flashcards-lista" class="card"></div>
                 </section>
 
-                <!-- TAB: REDAÇÃO -->
                 <section id="tab-redacao" class="tab-content">
                     <h1>✍️ Corretor de Redação</h1>
                     <p class="subtitle">Cole sua redação e receba correção estilo ENEM.</p>
@@ -146,7 +142,6 @@
                     </div>
                 </section>
 
-                <!-- TAB: VESTIBULINHO -->
                 <section id="tab-vestibulinho" class="tab-content">
                     <h1>📊 Vestibulinho</h1>
                     <p class="subtitle">20 questões geradas por IA.</p>
@@ -154,7 +149,6 @@
                     <div id="vestibulinho-container"></div>
                 </section>
 
-                <!-- TAB: GRUPO -->
                 <section id="tab-grupo" class="tab-content">
                     <h1>👥 Grupo de Estudos</h1>
                     <p class="subtitle">Estude com amigos, compartilhe progresso.</p>
@@ -178,7 +172,9 @@
                         <p id="grupo-desc-exibido" style="color:#94A3B8;">Descrição</p>
                         <p><strong>Código:</strong> <span id="grupo-codigo-exibido">XXXXXX</span></p>
                         <button id="btn-sair-grupo" class="btn-danger" style="margin-top:8px;">🚪 Sair do Grupo</button>
-                        <div id="membros-grupo-lista" style="margin-top:8px;"></div>
+                        <hr style="border-color:#2D3448; margin:16px 0;">
+                        <h4>👥 Membros</h4>
+                        <div id="membros-grupo-lista"></div>
                         <hr style="border-color:#2D3448; margin:16px 0;">
                         <h4>📊 Ranking</h4>
                         <div style="display:flex; gap:10px; margin-bottom:8px;">
@@ -196,7 +192,6 @@
                     </div>
                 </section>
 
-                <!-- TAB: AULAS -->
                 <section id="tab-aulas" class="tab-content">
                     <h1>🎬 Aulas</h1>
                     <p class="subtitle">Playlists do YouTube para estudar.</p>
@@ -212,7 +207,6 @@
                     <div id="aulas-lista" class="card"></div>
                 </section>
 
-                <!-- TAB: RELATÓRIOS -->
                 <section id="tab-relatorios" class="tab-content">
                     <h1>📈 Relatórios</h1>
                     <p class="subtitle">Acompanhe sua evolução.</p>
