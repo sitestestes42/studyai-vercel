@@ -432,10 +432,19 @@ function removerDigitando(el) {
 
 function detectarComando(texto) {
     var lower = texto.toLowerCase().trim();
-    if (lower.includes('pdf') || lower.includes('gerar pdf')) return 'pdf';
-    if (lower.includes('resumo') || lower.includes('sumário')) return 'resumo';
-    if (lower.includes('planilha') || lower.includes('csv')) return 'csv';
-    if (lower.includes('upload') || lower.includes('enviar pdf') || lower.includes('anexar')) return 'upload';
+    var palavras = lower.split(' ');
+    
+    if (lower === 'resumo' || lower === 'gerar resumo' || lower === 'sumário') return 'resumo';
+    if (lower === 'pdf' || lower === 'gerar pdf') return 'pdf';
+    if (lower === 'planilha' || lower === 'csv' || lower === 'gerar planilha') return 'csv';
+    if (lower === 'upload' || lower === 'enviar pdf' || lower === 'anexar') return 'upload';
+    
+    if (palavras.length >= 2 && palavras[0] === 'gerar') {
+        if (palavras[1] === 'resumo' || palavras[1] === 'sumário') return 'resumo';
+        if (palavras[1] === 'pdf') return 'pdf';
+        if (palavras[1] === 'planilha' || palavras[1] === 'csv') return 'csv';
+    }
+    
     return null;
 }
 
