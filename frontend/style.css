@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: #0B0E14;
+    background: linear-gradient(135deg, #0B0E14 0%, #1A1F2E 100%);
     color: #F1F5F9;
     height: 100vh;
     overflow: hidden;
@@ -139,8 +139,9 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 8px 20px;
-    background: #121824;
-    border-bottom: 1px solid #1E2638;
+    background: rgba(18, 24, 36, 0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
     height: 56px;
     position: sticky;
     top: 0;
@@ -161,7 +162,7 @@ body {
     border-radius: 8px;
     transition: 0.2s;
 }
-.btn-menu:hover { background: #1E2638; }
+.btn-menu:hover { background: rgba(255,255,255,0.06); }
 
 .logo-small {
     font-size: 20px;
@@ -364,7 +365,7 @@ body {
     flex: 1;
     padding: 20px 28px;
     overflow-y: auto;
-    background: #0B0E14;
+    background: transparent;
 }
 
 .tab-content {
@@ -382,7 +383,8 @@ h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
 .subtitle { color: #94A3B8; margin-bottom: 24px; font-size: 14px; }
 
 .card {
-    background: #1A1F2E;
+    background: rgba(26, 31, 46, 0.8);
+    backdrop-filter: blur(4px);
     border: 1px solid #2D3448;
     border-radius: 16px;
     padding: 24px;
@@ -484,9 +486,9 @@ input:focus, select:focus, textarea:focus {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0 8px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    margin-bottom: 12px;
+    padding: 8px 0 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    margin-bottom: 4px;
 }
 
 .chat-header-left {
@@ -519,7 +521,56 @@ input:focus, select:focus, textarea:focus {
     padding: 16px 0;
     background: transparent;
     border-radius: 16px;
+    margin-bottom: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.saudacao-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    flex: 1;
+    animation: fadeInUp 0.8s ease;
+}
+
+.saudacao-content {
+    text-align: center;
+    max-width: 500px;
+    padding: 20px;
+}
+
+.saudacao-icon {
+    font-size: 48px;
     margin-bottom: 8px;
+    display: block;
+    animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
+
+.saudacao-titulo {
+    font-size: 36px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #FFFFFF 0%, #C4B5FD 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+}
+
+.saudacao-subtitulo {
+    font-size: 18px;
+    color: #94A3B8;
+    font-weight: 400;
 }
 
 .mensagem {
@@ -541,9 +592,22 @@ input:focus, select:focus, textarea:focus {
 }
 
 .mensagem.ia {
-    background: #1A1F2E;
+    background: rgba(26, 31, 46, 0.8);
+    backdrop-filter: blur(4px);
     border-left: 3px solid #7C3AED;
     border-bottom-left-radius: 4px;
+    align-self: flex-start;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .mensagem.ia .fontes {
@@ -596,24 +660,40 @@ input:focus, select:focus, textarea:focus {
 .mensagem.ia ol li {
     padding: 4px 0;
 }
+
 .mensagem.ia table {
-    border-collapse: collapse;
-    margin: 8px 0;
     width: 100%;
-    font-size: 14px;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 8px 0;
+    display: table;
+    border-radius: 8px;
 }
-.mensagem.ia th {
-    background: #7C3AED;
-    color: #FFFFFF;
+
+.mensagem.ia table th,
+.mensagem.ia table td {
+    border: 1px solid #2D3448;
     padding: 8px 12px;
     text-align: left;
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 200px;
+}
+
+.mensagem.ia table th {
+    background: #7C3AED;
+    color: #FFFFFF;
     font-weight: 600;
 }
-.mensagem.ia td {
-    border: 1px solid #2D3448;
-    padding: 6px 10px;
-    color: #94A3B8;
+
+.mensagem.ia table td {
+    color: #E2E8F0;
 }
+
+.mensagem.ia table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.02);
+}
+
 .mensagem.ia code {
     background: #1E2638;
     padding: 2px 8px;
@@ -654,16 +734,11 @@ input:focus, select:focus, textarea:focus {
     line-height: 1.6;
 }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 .chat-modes {
     display: flex;
     gap: 8px;
     justify-content: center;
-    padding: 8px 0 12px 0;
+    padding: 4px 0 8px 0;
     flex-wrap: wrap;
 }
 
@@ -686,13 +761,15 @@ input:focus, select:focus, textarea:focus {
     background: #7C3AED;
     border-color: #7C3AED;
     color: white;
+    box-shadow: 0 0 20px rgba(124,58,237,0.3);
 }
 
 .chat-input-area {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: #1A1F2E;
+    background: rgba(26, 31, 46, 0.8);
+    backdrop-filter: blur(4px);
     border: 2px solid #2D3448;
     border-radius: 16px;
     padding: 6px 6px 6px 18px;
@@ -819,6 +896,25 @@ input:focus, select:focus, textarea:focus {
     .mode-btn {
         font-size: 11px;
         padding: 4px 12px;
+    }
+    .saudacao-titulo {
+        font-size: 28px;
+    }
+    .saudacao-subtitulo {
+        font-size: 16px;
+    }
+    .saudacao-icon {
+        font-size: 36px;
+    }
+    .mensagem.ia table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    .mensagem.ia table th,
+    .mensagem.ia table td {
+        white-space: nowrap;
+        padding: 6px 10px;
     }
 }
 
