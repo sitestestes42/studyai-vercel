@@ -20,9 +20,6 @@ var modoAtual = 'smart';
 
 function carregarIdioma() { return usuarioIdioma || 'pt'; }
 
-// ================================================================
-//  LOGIN / AUTENTICAÇÃO
-// ================================================================
 var telaLogin = document.getElementById('tela-login');
 var appPrincipal = document.getElementById('app-principal');
 var loginEmail = document.getElementById('login-email');
@@ -156,9 +153,6 @@ btnSair.addEventListener('click', async function() {
     appPrincipal.style.display = 'none';
 });
 
-// ================================================================
-//  ENTRAR NO APP
-// ================================================================
 async function entrarNoApp(user) {
     telaLogin.style.display = 'none';
     appPrincipal.style.display = 'block';
@@ -246,18 +240,12 @@ window.salvarNomeUsuario = async function() {
     }
 };
 
-// ================================================================
-//  CARREGAR DADOS DO USUÁRIO
-// ================================================================
 async function carregarDadosUsuario() {
     if (!usuarioAtual) return;
     carregarFlashcards();
     carregarRelatorios();
 }
 
-// ================================================================
-//  CHAMAR GROQ (VIA BACKEND DA VERCEL)
-// ================================================================
 async function chamarGroq(prompt) {
     var url = '/api/groq';
     var resp = await fetch(url, {
@@ -286,13 +274,30 @@ function getModoPrompt(modo) {
 }
 
 function mostrarSaudacaoIA() {
+    var saudacaoContainer = document.getElementById('saudacao-container');
+    if (saudacaoContainer) {
+        saudacaoContainer.style.display = 'flex';
+    }
     var chatMsg = document.getElementById('chat-mensagens');
-    chatMsg.innerHTML = '';
-    var saudacao = '✨ Olá! Como posso ajudar você hoje?';
-    adicionarMensagemStreaming(saudacao, 'ia');
+    var existing = chatMsg.querySelector('.mensagem');
+    if (!existing) {
+        var saudacaoDiv = document.createElement('div');
+        saudacaoDiv.className = 'saudacao-container';
+        saudacaoDiv.id = 'saudacao-container';
+        saudacaoDiv.innerHTML = '<div class="saudacao-content"><div class="saudacao-icon">✨</div><h1 class="saudacao-titulo">Olá!</h1><p class="saudacao-subtitulo">Como posso ajudar você hoje?</p></div>';
+        chatMsg.prepend(saudacaoDiv);
+    }
+}
+
+function esconderSaudacao() {
+    var saudacaoContainer = document.getElementById('saudacao-container');
+    if (saudacaoContainer) {
+        saudacaoContainer.style.display = 'none';
+    }
 }
 
 async function adicionarMensagemStreaming(texto, tipo, fontes) {
+    esconderSaudacao();
     var chatMsg = document.getElementById('chat-mensagens');
     var div = document.createElement('div');
     div.className = 'mensagem ' + tipo;
@@ -398,6 +403,7 @@ function formatarMarkdown(texto) {
 }
 
 function adicionarMensagemLocal(texto, tipo) {
+    esconderSaudacao();
     var chatMsg = document.getElementById('chat-mensagens');
     var div = document.createElement('div');
     div.className = 'mensagem ' + tipo;
@@ -407,6 +413,7 @@ function adicionarMensagemLocal(texto, tipo) {
 }
 
 function mostrarDigitando() {
+    esconderSaudacao();
     var chatMsg = document.getElementById('chat-mensagens');
     var div = document.createElement('div');
     div.className = 'mensagem ia digitando-indicator';
@@ -491,7 +498,7 @@ async function enviarPergunta(pergunta) {
 }
 
 function gerarPDF() {
-    var mensagens = document.querySelectorAll('#chat-mensagens .mensagem');
+    var mensagens = document.querySelectorAll('#chat-mensagens .mensagem:not(.saudacao-container)');
     var texto = '';
     mensagens.forEach(function(m) {
         var tipo = m.classList.contains('usuario') ? 'Você' : 'SiriusLearn';
@@ -507,7 +514,7 @@ function gerarPDF() {
 }
 
 function gerarResumo() {
-    var mensagens = document.querySelectorAll('#chat-mensagens .mensagem');
+    var mensagens = document.querySelectorAll('#chat-mensagens .mensagem:not(.saudacao-container)');
     var texto = '';
     mensagens.forEach(function(m) {
         var tipo = m.classList.contains('usuario') ? 'Você' : 'SiriusLearn';
@@ -523,7 +530,7 @@ function gerarResumo() {
 }
 
 function gerarCSV() {
-    var mensagens = document.querySelectorAll('#chat-mensagens .mensagem');
+    var mensagens = document.querySelectorAll('#chat-mensagens .mensagem:not(.saudacao-container)');
     var linhas = ['Tipo,Mensagem'];
     mensagens.forEach(function(m) {
         var tipo = m.classList.contains('usuario') ? 'Usuário' : 'IA';
@@ -584,9 +591,6 @@ document.getElementById('btn-nova-conversa-drawer').addEventListener('click', as
     await criarNovaConversa('Nova conversa');
 });
 
-// ================================================================
-//  CONVERSAS
-// ================================================================
 async function carregarConversas() {
     if (!usuarioAtual) return;
     try {
@@ -661,12 +665,17 @@ async function atualizarTituloConversa(conversaId, novoTitulo) {
 
 async function deletarConversa(id) {
     if (!confirm('Deseja deletar esta conversa?')) return;
+    if (!usuarioAtual) {
+        alert('Você precisa estar logado.');
+        return;
+    }
     try {
-        await supabaseClient
+        var { error } = await supabaseClient
             .from('conversas')
             .delete()
             .eq('id', id)
             .eq('usuario_id', usuarioAtual.id);
+        if (error) throw error;
         conversas = conversas.filter(function(c) { return c.id !== id; });
         if (conversaAtual && conversaAtual.id === id) {
             conversaAtual = conversas[0] || null;
@@ -679,6 +688,7 @@ async function deletarConversa(id) {
         renderizarListaConversas();
     } catch (e) {
         console.error('Erro ao deletar conversa:', e);
+        alert('Erro ao deletar conversa. Verifique o console.');
     }
 }
 
@@ -689,6 +699,9 @@ async function alternarConversa(id) {
     renderizarListaConversas();
     carregarMensagensConversa(id);
 }
+
+window.deletarConversa = deletarConversa;
+window.alternarConversa = alternarConversa;
 
 function renderizarListaConversas() {
     var container = document.getElementById('lista-conversas');
@@ -760,9 +773,6 @@ async function salvarMensagem(conversaId, texto, tipo) {
     }
 }
 
-// ================================================================
-//  DRAWER E NAVEGAÇÃO
-// ================================================================
 var drawer = document.getElementById('drawer');
 var overlay = document.getElementById('drawer-overlay');
 
@@ -804,9 +814,6 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarRelatorios();
 });
 
-// ================================================================
-//  GRUPOS
-// ================================================================
 async function carregarGrupoDoUsuario() {
     if (!usuarioAtual) return;
     try {
@@ -1082,9 +1089,6 @@ async function carregarChatGrupo(grupoId) {
     });
 }
 
-// ================================================================
-//  AULAS
-// ================================================================
 async function carregarAulas() {
     try {
         var { data, error } = await supabaseClient
@@ -1126,9 +1130,6 @@ document.getElementById('btn-add-aula').addEventListener('click', async function
     }
 });
 
-// ================================================================
-//  FLASHCARDS
-// ================================================================
 async function carregarFlashcards() {
     if (!usuarioAtual) return;
     try {
@@ -1164,9 +1165,6 @@ async function revisarFlashcard(id) {
     } catch (e) { console.error('Erro ao revisar:', e); }
 }
 
-// ================================================================
-//  RELATÓRIOS
-// ================================================================
 async function carregarRelatorios() {
     if (!usuarioAtual) return;
     try {
