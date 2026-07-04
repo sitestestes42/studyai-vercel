@@ -23,6 +23,7 @@ var conversas = [];
 var usuarioNomeExibicao = '';
 var usuarioIdioma = 'pt';
 var modoAtual = 'smart';
+var topicos = [];
 
 // ================================================================
 //  DOM ELEMENTOS
@@ -182,6 +183,8 @@ async function entrarNoApp(user) {
     window.usuarioNomeExibicao = usuarioNomeExibicao;
     window.usuarioIdioma = usuarioIdioma;
 
+    document.getElementById('idioma-label').textContent = usuarioIdioma.toUpperCase();
+
     carregarDadosUsuario();
     carregarConversas();
     carregarGrupoDoUsuario();
@@ -223,27 +226,19 @@ async function chamarGroq(prompt) {
 // ================================================================
 var modosInfo = {
     smart: {
-        icone: 'fas fa-brain',
         nome: 'Smart',
-        descricao: 'Responde de forma equilibrada, adaptando a profundidade conforme a pergunta.',
         prompt: 'Responda de forma equilibrada, adaptando a profundidade conforme a pergunta. Seja claro e objetivo.'
     },
     deeper: {
-        icone: 'fas fa-microscope',
         nome: 'Think Deeper',
-        descricao: 'Respostas mais longas, com análises aprofundadas e múltiplas perspectivas.',
         prompt: 'Responda com análises aprofundadas, múltiplas perspectivas e detalhamento completo. Explore o tema em profundidade.'
     },
     learn: {
-        icone: 'fas fa-graduation-cap',
         nome: 'Estude e Aprenda',
-        descricao: 'Respostas com perguntas interativas, analogias e exemplos práticos. Guie o aprendizado passo a passo.',
         prompt: 'Responda com perguntas interativas, analogias e exemplos práticos. Guie o aprendizado passo a passo.'
     },
     search: {
-        icone: 'fas fa-globe',
         nome: 'Pesquisar',
-        descricao: 'Respostas com referências, citações e fontes confiáveis. Inclui a fonte ao final de cada informação.',
         prompt: 'Responda com referências, citações e fontes confiáveis. Inclua a fonte ao final de cada informação relevante.'
     }
 };
@@ -266,6 +261,15 @@ async function carregarConfiguracoes() {
         });
     }
 
+    // Selecionar modo via dropdown
+    var modoSelect = document.getElementById('modo-select');
+    if (modoSelect) {
+        modoSelect.value = modoAtual;
+        modoSelect.addEventListener('change', function() {
+            modoAtual = this.value;
+        });
+    }
+
     document.getElementById('btn-editar-nome').addEventListener('click', criarModalNome);
     document.getElementById('btn-alterar-senha').addEventListener('click', function() {
         alert('Funcionalidade em desenvolvimento. Em breve você poderá alterar sua senha.');
@@ -285,6 +289,46 @@ async function salvarConfiguracao(chave, valor) {
         console.error('Erro ao salvar configuração:', e);
     }
 }
+
+// ================================================================
+//  MODAL DE NOME
+// ================================================================
+function criarModalNome() {
+    var overlay = document.createElement('div');
+    overlay.id = 'modal-nome';
+    overlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; align-items:center; justify-content:center; z-index:9999; backdrop-filter:blur(4px);';
+    overlay.innerHTML = '<div style="background:var(--bg-card); border-radius:20px; padding:32px; max-width:400px; width:90%; border:1px solid var(--border-color); box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);"><h3 style="margin-bottom:8px; color:var(--text-primary);"><i class="fas fa-pencil-alt"></i> Editar Nome</h3><p style="color:var(--text-muted); font-size:14px; margin-bottom:16px;">Como você quer ser chamado?</p><input type="text" id="input-novo-nome" placeholder="Digite seu novo nome" value="' + usuarioNomeExibicao + '" style="width:100%; padding:12px 16px; background:var(--bg-input); border:1px solid var(--border-color); border-radius:12px; color:var(--text-primary); font-size:16px; margin-bottom:16px;"><div style="display:flex; gap:10px;"><button onclick="salvarNomeUsuario()" style="flex:1; background:var(--cor-gradiente); color:white; border:none; padding:12px; border-radius:12px; font-weight:600; cursor:pointer;"><i class="fas fa-save"></i> Salvar</button><button onclick="fecharModalNome()" style="flex:1; background:var(--bg-secondary); color:var(--text-muted); border:1px solid var(--border-color); padding:12px; border-radius:12px; font-weight:600; cursor:pointer;">Cancelar</button></div></div>';
+    document.body.appendChild(overlay);
+    document.getElementById('input-novo-nome').focus();
+}
+
+window.fecharModalNome = function() {
+    var modal = document.getElementById('modal-nome');
+    if (modal) modal.remove();
+};
+
+window.salvarNomeUsuario = async function() {
+    var input = document.getElementById('input-novo-nome');
+    var nome = input.value.trim();
+    if (!nome) { alert('Digite um nome válido.'); return; }
+
+    try {
+        var { error } = await supabaseClient
+            .from('usuarios')
+            .upsert({ id: usuarioAtual.id, nome_exibicao: nome });
+        if (error) throw error;
+
+        usuarioNomeExibicao = nome;
+        window.usuarioNomeExibicao = nome;
+        saudacaoTopo.innerHTML = 'Olá, <strong>' + nome + '</strong> <i class="fas fa-wave-square"></i>';
+        drawerUsuario.textContent = nome;
+        fecharModalNome();
+        alert('✅ Nome atualizado com sucesso!');
+    } catch (e) {
+        console.error(e);
+        alert('Erro ao salvar nome.');
+    }
+};
 
 // ================================================================
 //  SAUDAÇÃO
@@ -495,6 +539,40 @@ function gerarCSV() {
 }
 
 // ================================================================
+//  TÓPICOS DA CONVERSA
+// ================================================================
+function adicionarTopico(pergunta) {
+    if (topicos.some(function(t) { return t === pergunta; })) return;
+    topicos.push(pergunta);
+    renderizarTopicos();
+}
+
+function renderizarTopicos() {
+    var container = document.getElementById('lista-topicos');
+    if (!container) return;
+    if (topicos.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted); font-size:13px;"><i class="fas fa-comment-slash"></i> Nenhum tópico ainda.</p>';
+        return;
+    }
+    var html = '';
+    topicos.forEach(function(topico, index) {
+        html += '<div class="topico-item" onclick="scrollParaTopico(' + index + ')">' +
+                '<i class="fas fa-comment"></i> ' + topico + '</div>';
+    });
+    container.innerHTML = html;
+}
+
+function scrollParaTopico(index) {
+    var mensagens = document.querySelectorAll('#chat-mensagens .mensagem.usuario');
+    if (mensagens[index]) {
+        mensagens[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.querySelectorAll('.topico-item').forEach(function(el, i) {
+            el.classList.toggle('active', i === index);
+        });
+    }
+}
+
+// ================================================================
 //  ENVIAR PERGUNTA
 // ================================================================
 var chatInput = document.getElementById('chat-input');
@@ -518,6 +596,7 @@ async function enviarPergunta(pergunta) {
     }
 
     adicionarMensagemLocal(pergunta, 'usuario');
+    adicionarTopico(pergunta);
     chatInput.value = '';
     await salvarMensagem(conversaAtual.id, pergunta, 'usuario');
 
@@ -579,19 +658,6 @@ document.getElementById('btn-upload-pdf').addEventListener('click', function() {
         }
     };
     input.click();
-});
-
-// ================================================================
-//  SELECIONAR MODO (ESTILO DEEPSEEK)
-// ================================================================
-document.querySelectorAll('.mode-item').forEach(function(item) {
-    item.addEventListener('click', function() {
-        document.querySelectorAll('.mode-item').forEach(function(m) {
-            m.classList.remove('active');
-        });
-        this.classList.add('active');
-        modoAtual = this.dataset.mode;
-    });
 });
 
 // ================================================================
@@ -658,6 +724,8 @@ async function criarNovaConversa(titulo) {
         conversaAtual = data;
         renderizarListaConversas();
         document.getElementById('chat-mensagens').innerHTML = '';
+        topicos = [];
+        renderizarTopicos();
         mostrarSaudacaoIA();
     } catch (e) {
         console.error('Erro ao criar conversa:', e);
@@ -842,11 +910,389 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarRanking();
     carregarFlashcards();
     carregarRelatorios();
-    document.getElementById('idioma-label').textContent = usuarioIdioma ? usuarioIdioma.toUpperCase() : 'PT';
 });
 
 // ================================================================
-//  GRUPOS, FLASHCARDS, RELATÓRIOS, AULAS (mantidos do código anterior)
+//  GRUPOS
 // ================================================================
-// (As funções de grupos, flashcards, relatórios e aulas permanecem as mesmas do código anterior)
-// Para não estender demais, mantenha as funções que já estavam funcionando.
+async function carregarGrupoDoUsuario() {
+    if (!usuarioAtual) return;
+    try {
+        var { data, error } = await supabaseClient
+            .from('membros_grupo')
+            .select('grupo_id, grupos(*)')
+            .eq('usuario_id', usuarioAtual.id)
+            .maybeSingle();
+        if (error && error.code !== 'PGRST116') throw error;
+        if (data) {
+            grupoAtual = data.grupos;
+            mostrarGrupoAtual(grupoAtual);
+        }
+    } catch (e) {
+        console.error('Erro ao carregar grupo:', e);
+    }
+}
+
+function mostrarGrupoAtual(grupo) {
+    var div = document.getElementById('meu-grupo-info');
+    if (!div) return;
+    div.style.display = 'block';
+    document.getElementById('grupo-nome-exibido').textContent = '📌 ' + grupo.nome;
+    document.getElementById('grupo-desc-exibido').textContent = grupo.descricao || 'Sem descrição';
+    document.getElementById('grupo-codigo-exibido').textContent = grupo.codigo_convite;
+
+    var containerMembros = document.getElementById('membros-grupo-lista');
+    if (!containerMembros) {
+        var newContainer = document.createElement('div');
+        newContainer.id = 'membros-grupo-lista';
+        newContainer.style.marginTop = '8px';
+        newContainer.innerHTML = '<p style="color:#94A3B8;"><i class="fas fa-spinner fa-spin"></i> Carregando membros...</p>';
+        div.insertBefore(newContainer, div.querySelector('hr'));
+    }
+
+    carregarMembrosGrupo(grupo.id);
+    carregarRankingGrupo(grupo.id, 'semanal');
+    carregarChatGrupo(grupo.id);
+}
+
+async function carregarMembrosGrupo(grupoId) {
+    try {
+        var { data: membros, error } = await supabaseClient
+            .from('membros_grupo')
+            .select('usuario_id')
+            .eq('grupo_id', grupoId);
+        if (error) throw error;
+        var container = document.getElementById('membros-grupo-lista');
+        if (!membros || membros.length === 0) {
+            container.innerHTML = '<p style="color:#94A3B8;"><i class="fas fa-users"></i> Nenhum membro.</p>';
+            return;
+        }
+        var userIds = membros.map(function(m) { return m.usuario_id; });
+        var { data: usuarios, error: err2 } = await supabaseClient
+            .from('usuarios')
+            .select('id, nome_exibicao')
+            .in('id', userIds);
+        if (err2) throw err2;
+        var nomeMap = {};
+        usuarios.forEach(function(u) { nomeMap[u.id] = u.nome_exibicao || 'Usuário'; });
+        var html = '<div style="display:flex; flex-wrap:wrap; gap:8px;">';
+        membros.forEach(function(m) {
+            var nome = nomeMap[m.usuario_id] || 'Usuário';
+            html += '<span style="background:#1A1F2E; padding:4px 12px; border-radius:20px; border:1px solid #2D3448; font-size:13px;"><i class="fas fa-user"></i> ' + nome + '</span>';
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    } catch (e) {
+        console.error('Erro ao carregar membros:', e);
+        var container = document.getElementById('membros-grupo-lista');
+        if (container) container.innerHTML = '<p style="color:#F87171;"><i class="fas fa-exclamation-triangle"></i> Erro ao carregar membros.</p>';
+    }
+}
+
+document.getElementById('btn-criar-grupo').addEventListener('click', async function() {
+    var nome = document.getElementById('grupo-nome').value.trim();
+    var descricao = document.getElementById('grupo-descricao').value.trim();
+    if (!nome) { alert('Digite um nome para o grupo.'); return; }
+    var codigo = Math.random().toString(36).substring(2, 8).toUpperCase();
+    try {
+        var { data, error } = await supabaseClient.from('grupos').insert({
+            nome: nome,
+            descricao: descricao,
+            codigo_convite: codigo,
+            criador_id: usuarioAtual.id
+        }).select().single();
+        if (error) throw error;
+        await supabaseClient.from('membros_grupo').insert({
+            grupo_id: data.id,
+            usuario_id: usuarioAtual.id
+        });
+        grupoAtual = data;
+        mostrarGrupoAtual(data);
+        alert('✅ Grupo "' + nome + '" criado! Código: ' + codigo);
+    } catch (e) {
+        alert('Erro ao criar grupo.');
+        console.error(e);
+    }
+});
+
+document.getElementById('btn-entrar-grupo').addEventListener('click', async function() {
+    var codigo = document.getElementById('grupo-convite').value.trim().toUpperCase();
+    if (!codigo) { alert('Digite o código de convite.'); return; }
+    try {
+        var { data, error } = await supabaseClient
+            .from('grupos')
+            .select('*')
+            .eq('codigo_convite', codigo)
+            .single();
+        if (error) throw error;
+        await supabaseClient.from('membros_grupo').insert({
+            grupo_id: data.id,
+            usuario_id: usuarioAtual.id
+        });
+        grupoAtual = data;
+        mostrarGrupoAtual(data);
+        alert('✅ Entrou no grupo "' + data.nome + '"!');
+    } catch (e) {
+        alert('Código inválido ou grupo não encontrado.');
+        console.error(e);
+    }
+});
+
+document.getElementById('btn-sair-grupo').addEventListener('click', async function() {
+    if (!grupoAtual || !usuarioAtual) return;
+    if (!confirm('Sair do grupo "' + grupoAtual.nome + '"?')) return;
+    try {
+        await supabaseClient
+            .from('membros_grupo')
+            .delete()
+            .eq('grupo_id', grupoAtual.id)
+            .eq('usuario_id', usuarioAtual.id);
+        grupoAtual = null;
+        document.getElementById('meu-grupo-info').style.display = 'none';
+        alert('Você saiu do grupo.');
+    } catch (e) {
+        alert('Erro ao sair do grupo.');
+        console.error(e);
+    }
+});
+
+var rankingPeriodo = 'semanal';
+
+document.getElementById('btn-ranking-semanal').addEventListener('click', function() {
+    rankingPeriodo = 'semanal';
+    if (grupoAtual) carregarRankingGrupo(grupoAtual.id, 'semanal');
+});
+document.getElementById('btn-ranking-mensal').addEventListener('click', function() {
+    rankingPeriodo = 'mensal';
+    if (grupoAtual) carregarRankingGrupo(grupoAtual.id, 'mensal');
+});
+
+async function carregarRankingGrupo(grupoId, periodo) {
+    if (!grupoId) return;
+    try {
+        var dataInicio = new Date();
+        if (periodo === 'semanal') {
+            dataInicio.setDate(dataInicio.getDate() - 7);
+        } else {
+            dataInicio.setMonth(dataInicio.getMonth() - 1);
+        }
+        var inicioStr = dataInicio.toISOString();
+        var { data: sessoes, error } = await supabaseClient
+            .from('sessoes')
+            .select('usuario_id, duracao')
+            .eq('grupo_id', grupoId)
+            .gte('created_at', inicioStr);
+        if (error) throw error;
+        var rankingMap = {};
+        sessoes.forEach(function(s) {
+            var uid = s.usuario_id;
+            if (!rankingMap[uid]) rankingMap[uid] = 0;
+            rankingMap[uid] += s.duracao || 0;
+        });
+        var userIds = Object.keys(rankingMap);
+        var div = document.getElementById('ranking-grupo-lista');
+        if (userIds.length === 0) {
+            div.innerHTML = '<p style="color:#94A3B8;"><i class="fas fa-chart-simple"></i> Nenhum estudo registrado neste período.</p>';
+            return;
+        }
+        var { data: usuarios, error: err2 } = await supabaseClient
+            .from('usuarios')
+            .select('id, nome_exibicao')
+            .in('id', userIds);
+        if (err2) throw err2;
+        var nomeMap = {};
+        usuarios.forEach(function(u) { nomeMap[u.id] = u.nome_exibicao || 'Usuário'; });
+        var ranking = userIds.map(function(uid) {
+            return { nome: nomeMap[uid] || 'Usuário', total: rankingMap[uid] };
+        });
+        ranking.sort(function(a, b) { return b.total - a.total; });
+        var html = '';
+        ranking.forEach(function(item, i) {
+            var medalha = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i+1) + 'º';
+            html += '<div class="ranking-item"><span class="pos">' + medalha + '</span><span class="nome"><i class="fas fa-user"></i> ' + item.nome + '</span><span class="min">' + item.total + ' min</span></div>';
+        });
+        div.innerHTML = html;
+    } catch (e) {
+        console.error('Erro ao carregar ranking:', e);
+        var div = document.getElementById('ranking-grupo-lista');
+        if (div) div.innerHTML = '<p style="color:#F87171;"><i class="fas fa-exclamation-triangle"></i> Erro ao carregar ranking.</p>';
+    }
+}
+
+async function carregarChatGrupo(grupoId) {
+    var container = document.getElementById('chat-grupo-mensagens');
+    if (!container) return;
+    try {
+        var { data, error } = await supabaseClient
+            .from('mensagens_grupo')
+            .select('*')
+            .eq('grupo_id', grupoId)
+            .order('created_at', { ascending: true })
+            .limit(50);
+        if (error) throw error;
+        container.innerHTML = '';
+        data.forEach(function(msg) {
+            var div = document.createElement('div');
+            div.className = 'msg-grupo';
+            div.innerHTML = '<i class="fas fa-user-circle"></i> <strong>' + (msg.usuario_email || 'Usuário') + '</strong>: ' + msg.texto + ' <span class="time">' + new Date(msg.created_at).toLocaleTimeString() + '</span>';
+            container.appendChild(div);
+        });
+        container.scrollTop = container.scrollHeight;
+    } catch (e) {
+        console.error('Erro ao carregar mensagens do grupo:', e);
+    }
+    if (chatGrupoSubscription) {
+        chatGrupoSubscription.unsubscribe();
+        chatGrupoSubscription = null;
+    }
+    chatGrupoSubscription = supabaseClient
+        .channel('mensagens_grupo')
+        .on('postgres_changes', {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'mensagens_grupo',
+            filter: 'grupo_id=eq.' + grupoId
+        }, function(payload) {
+            var msg = payload.new;
+            var div = document.createElement('div');
+            div.className = 'msg-grupo';
+            div.innerHTML = '<i class="fas fa-user-circle"></i> <strong>' + (msg.usuario_email || 'Usuário') + '</strong>: ' + msg.texto + ' <span class="time">' + new Date(msg.created_at).toLocaleTimeString() + '</span>';
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        })
+        .subscribe();
+    var btnEnviar = document.getElementById('btn-chat-grupo-enviar');
+    var input = document.getElementById('chat-grupo-input');
+    var novoBtn = btnEnviar.cloneNode(true);
+    btnEnviar.parentNode.replaceChild(novoBtn, btnEnviar);
+    var novoInput = input.cloneNode(true);
+    input.parentNode.replaceChild(novoInput, input);
+    novoBtn.onclick = async function() {
+        var texto = novoInput.value.trim();
+        if (!texto || !grupoAtual || !usuarioAtual) return;
+        try {
+            var { error } = await supabaseClient.from('mensagens_grupo').insert({
+                grupo_id: grupoAtual.id,
+                usuario_id: usuarioAtual.id,
+                usuario_email: usuarioNomeExibicao || usuarioAtual.email.split('@')[0],
+                texto: texto,
+                created_at: new Date().toISOString()
+            });
+            if (error) throw error;
+            novoInput.value = '';
+        } catch (e) {
+            console.error('Erro ao enviar mensagem:', e);
+            alert('Erro ao enviar mensagem.');
+        }
+    };
+    novoInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') novoBtn.click();
+    });
+}
+
+// ================================================================
+//  AULAS
+// ================================================================
+async function carregarAulas() {
+    try {
+        var { data, error } = await supabaseClient
+            .from('aulas')
+            .select('*')
+            .order('categoria', { ascending: true });
+        if (error) throw error;
+        var container = document.getElementById('aulas-lista');
+        if (!data || data.length === 0) {
+            container.innerHTML = '<p style="color:#94A3B8;"><i class="fas fa-video-slash"></i> Nenhuma aula adicionada ainda.</p>';
+            return;
+        }
+        var html = '';
+        data.forEach(function(aula) {
+            var thumb = aula.link.includes('watch?v=') 
+                ? 'https://img.youtube.com/vi/' + aula.link.split('v=')[1].split('&')[0] + '/mqdefault.jpg'
+                : '';
+            html += '<div class="aula-item"><div class="thumb">' + (thumb ? '<img src="' + thumb + '" alt="Thumb" />' : '<i class="fas fa-video"></i>') + '</div><div class="info"><div class="titulo"><i class="fas fa-play-circle"></i> ' + aula.titulo + '</div><div class="categoria"><i class="fas fa-folder"></i> ' + aula.categoria + '</div><a href="' + aula.link + '" target="_blank" class="link"><i class="fas fa-external-link-alt"></i> Assistir no YouTube</a></div></div>';
+        });
+        container.innerHTML = html;
+    } catch (e) { console.error('Erro ao carregar aulas:', e); }
+}
+
+document.getElementById('btn-add-aula').addEventListener('click', async function() {
+    var categoria = document.getElementById('aula-categoria').value.trim();
+    var titulo = document.getElementById('aula-titulo').value.trim();
+    var link = document.getElementById('aula-link').value.trim();
+    if (!categoria || !titulo || !link) { alert('Preencha todos os campos.'); return; }
+    try {
+        await supabaseClient.from('aulas').insert({ categoria: categoria, titulo: titulo, link: link });
+        alert('✅ Aula adicionada!');
+        document.getElementById('aula-categoria').value = '';
+        document.getElementById('aula-titulo').value = '';
+        document.getElementById('aula-link').value = '';
+        carregarAulas();
+    } catch (e) {
+        alert('Erro ao adicionar aula.');
+        console.error(e);
+    }
+});
+
+// ================================================================
+//  FLASHCARDS
+// ================================================================
+async function carregarFlashcards() {
+    if (!usuarioAtual) return;
+    try {
+        var { data, error } = await supabaseClient
+            .from('flashcards')
+            .select('*')
+            .eq('usuario_id', usuarioAtual.id)
+            .lte('proxima_revisao', oggi());
+        if (error) throw error;
+        var div = document.getElementById('flashcards-lista');
+        if (!data || data.length === 0) {
+            div.innerHTML = '<p style="color:#94A3B8;"><i class="fas fa-check-circle" style="color:#4ADE80;"></i> Nenhum flashcard para revisar hoje!</p>';
+            return;
+        }
+        var html = '';
+        data.forEach(function(f) {
+            html += '<div class="flashcard-item" onclick="this.classList.toggle(\'aberto\')"><div class="pergunta"><i class="fas fa-key"></i> ' + f.pergunta + '</div><div class="resposta">' + f.resposta + '</div><button style="margin-top:10px; padding:4px 12px; font-size:12px; background:#2D3448; border:none; border-radius:8px; color:white; cursor:pointer;" onclick="event.stopPropagation(); revisarFlashcard(\'' + f.id + '\')"><i class="fas fa-check"></i> Já revisei</button></div>';
+        });
+        div.innerHTML = html;
+    } catch (e) { console.error('Erro ao carregar flashcards:', e); }
+}
+
+async function revisarFlashcard(id) {
+    try {
+        var novaData = new Date();
+        novaData.setDate(novaData.getDate() + 3);
+        await supabaseClient
+            .from('flashcards')
+            .update({ proxima_revisao: novaData.toISOString().split('T')[0] })
+            .eq('id', id);
+        carregarFlashcards();
+        alert('✅ Revisado! Próxima revisão em 3 dias.');
+    } catch (e) { console.error('Erro ao revisar:', e); }
+}
+
+// ================================================================
+//  RELATÓRIOS
+// ================================================================
+async function carregarRelatorios() {
+    if (!usuarioAtual) return;
+    try {
+        var { data: sessoes, error } = await supabaseClient
+            .from('sessoes')
+            .select('duracao')
+            .eq('usuario_id', usuarioAtual.id);
+        if (error) throw error;
+        var totalMin = sessoes.reduce(function(acc, s) { return acc + (s.duracao || 0); }, 0);
+        document.getElementById('rel-total').textContent = totalMin;
+        document.getElementById('rel-sessoes').textContent = sessoes.length;
+        var { data: flashcards } = await supabaseClient
+            .from('flashcards')
+            .select('id')
+            .eq('usuario_id', usuarioAtual.id);
+        document.getElementById('rel-flashcards').textContent = flashcards ? flashcards.length : 0;
+        document.getElementById('rel-racha').textContent = '0';
+    } catch (e) { console.error('Erro ao carregar relatórios:', e); }
+}
+
+function carregarRanking() {}
