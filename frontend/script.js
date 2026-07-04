@@ -254,26 +254,45 @@ async function carregarConfiguracoes() {
     var selectIdioma = document.getElementById('config-idioma');
     if (selectIdioma) {
         selectIdioma.value = usuarioIdioma;
-        selectIdioma.addEventListener('change', function() {
-            usuarioIdioma = this.value;
-            salvarConfiguracao('idioma', usuarioIdioma);
-            document.getElementById('idioma-label').textContent = usuarioIdioma.toUpperCase();
+        // Remove listeners antigos para evitar duplicação
+        selectIdioma.removeEventListener('change', onIdiomaChange);
+        selectIdioma.addEventListener('change', onIdiomaChange);
+    }
+
+    // Botão editar nome
+    var btnEditarNome = document.getElementById('btn-editar-nome');
+    if (btnEditarNome) {
+        btnEditarNome.removeEventListener('click', criarModalNome);
+        btnEditarNome.addEventListener('click', criarModalNome);
+    }
+
+    // Botão alterar senha
+    var btnAlterarSenha = document.getElementById('btn-alterar-senha');
+    if (btnAlterarSenha) {
+        btnAlterarSenha.removeEventListener('click', function() {});
+        btnAlterarSenha.addEventListener('click', function() {
+            alert('Funcionalidade em desenvolvimento. Em breve você poderá alterar sua senha.');
         });
     }
 
-    // Selecionar modo via dropdown
+    // Modo select
     var modoSelect = document.getElementById('modo-select');
     if (modoSelect) {
         modoSelect.value = modoAtual;
-        modoSelect.addEventListener('change', function() {
-            modoAtual = this.value;
-        });
+        modoSelect.removeEventListener('change', onModoChange);
+        modoSelect.addEventListener('change', onModoChange);
     }
+}
 
-    document.getElementById('btn-editar-nome').addEventListener('click', criarModalNome);
-    document.getElementById('btn-alterar-senha').addEventListener('click', function() {
-        alert('Funcionalidade em desenvolvimento. Em breve você poderá alterar sua senha.');
-    });
+function onIdiomaChange(e) {
+    usuarioIdioma = e.target.value;
+    salvarConfiguracao('idioma', usuarioIdioma);
+    document.getElementById('idioma-label').textContent = usuarioIdioma.toUpperCase();
+    // Recarregar a conversa atual para aplicar o novo idioma (opcional)
+}
+
+function onModoChange(e) {
+    modoAtual = e.target.value;
 }
 
 async function salvarConfiguracao(chave, valor) {
@@ -324,6 +343,7 @@ window.salvarNomeUsuario = async function() {
         drawerUsuario.textContent = nome;
         fecharModalNome();
         alert('✅ Nome atualizado com sucesso!');
+        // Atualiza a saudação em todas as partes (opcional)
     } catch (e) {
         console.error(e);
         alert('Erro ao salvar nome.');
@@ -910,6 +930,8 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarRanking();
     carregarFlashcards();
     carregarRelatorios();
+    // Garantir que o botão de idioma mostre a label correta
+    document.getElementById('idioma-label').textContent = usuarioIdioma ? usuarioIdioma.toUpperCase() : 'PT';
 });
 
 // ================================================================
@@ -1244,7 +1266,7 @@ async function carregarFlashcards() {
             .from('flashcards')
             .select('*')
             .eq('usuario_id', usuarioAtual.id)
-            .lte('proxima_revisao', oggi());
+            .lte('proxima_revisao', hoje());
         if (error) throw error;
         var div = document.getElementById('flashcards-lista');
         if (!data || data.length === 0) {
