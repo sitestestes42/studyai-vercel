@@ -178,7 +178,7 @@ async function entrarNoApp(user) {
         usuarioIdioma = 'pt';
     }
 
-    saudacaoTopo.innerHTML = 'Olá, <strong>' + usuarioNomeExibicao + '</strong> <i class="fas fa-wave-square"></i>';
+    saudacaoTopo.innerHTML = '<strong>' + usuarioNomeExibicao + '</strong> <i class="fas fa-wave-square"></i>';
     drawerUsuario.textContent = usuarioNomeExibicao;
     window.usuarioNomeExibicao = usuarioNomeExibicao;
     window.usuarioIdioma = usuarioIdioma;
@@ -254,19 +254,16 @@ async function carregarConfiguracoes() {
     var selectIdioma = document.getElementById('config-idioma');
     if (selectIdioma) {
         selectIdioma.value = usuarioIdioma;
-        // Remove listeners antigos para evitar duplicação
         selectIdioma.removeEventListener('change', onIdiomaChange);
         selectIdioma.addEventListener('change', onIdiomaChange);
     }
 
-    // Botão editar nome
     var btnEditarNome = document.getElementById('btn-editar-nome');
     if (btnEditarNome) {
         btnEditarNome.removeEventListener('click', criarModalNome);
         btnEditarNome.addEventListener('click', criarModalNome);
     }
 
-    // Botão alterar senha
     var btnAlterarSenha = document.getElementById('btn-alterar-senha');
     if (btnAlterarSenha) {
         btnAlterarSenha.removeEventListener('click', function() {});
@@ -275,7 +272,6 @@ async function carregarConfiguracoes() {
         });
     }
 
-    // Modo select
     var modoSelect = document.getElementById('modo-select');
     if (modoSelect) {
         modoSelect.value = modoAtual;
@@ -288,7 +284,6 @@ function onIdiomaChange(e) {
     usuarioIdioma = e.target.value;
     salvarConfiguracao('idioma', usuarioIdioma);
     document.getElementById('idioma-label').textContent = usuarioIdioma.toUpperCase();
-    // Recarregar a conversa atual para aplicar o novo idioma (opcional)
 }
 
 function onModoChange(e) {
@@ -332,21 +327,22 @@ window.salvarNomeUsuario = async function() {
     if (!nome) { alert('Digite um nome válido.'); return; }
 
     try {
-        var { error } = await supabaseClient
+        var { data, error } = await supabaseClient
             .from('usuarios')
-            .upsert({ id: usuarioAtual.id, nome_exibicao: nome });
+            .upsert({ id: usuarioAtual.id, nome_exibicao: nome })
+            .select();
         if (error) throw error;
+        console.log('Nome salvo com sucesso:', data);
 
         usuarioNomeExibicao = nome;
         window.usuarioNomeExibicao = nome;
-        saudacaoTopo.innerHTML = 'Olá, <strong>' + nome + '</strong> <i class="fas fa-wave-square"></i>';
+        saudacaoTopo.innerHTML = '<strong>' + nome + '</strong> <i class="fas fa-wave-square"></i>';
         drawerUsuario.textContent = nome;
         fecharModalNome();
         alert('✅ Nome atualizado com sucesso!');
-        // Atualiza a saudação em todas as partes (opcional)
     } catch (e) {
-        console.error(e);
-        alert('Erro ao salvar nome.');
+        console.error('Erro ao salvar nome:', e);
+        alert('Erro ao salvar nome. Verifique o console.');
     }
 };
 
@@ -807,11 +803,33 @@ async function deletarConversa(id) {
 }
 
 async function alternarConversa(id) {
+    console.log('Alternando para conversa:', id);
     var conv = conversas.find(function(c) { return c.id === id; });
-    if (!conv) return;
+    if (!conv) {
+        console.error('Conversa não encontrada:', id);
+        return;
+    }
     conversaAtual = conv;
     renderizarListaConversas();
-    carregarMensagensConversa(id);
+    await carregarMensagensConversa(id);
+    if (window.innerWidth <= 768) {
+        drawer.classList.remove('open');
+        overlay.classList.remove('show');
+    }
+    topicos = [];
+    renderizarTopicos();
+    var { data, error } = await supabaseClient
+        .from('mensagens')
+        .select('*')
+        .eq('conversa_id', id)
+        .order('created_at', { ascending: true });
+    if (!error && data) {
+        data.forEach(function(msg) {
+            if (msg.tipo === 'usuario') {
+                adicionarTopico(msg.texto);
+            }
+        });
+    }
 }
 
 window.deletarConversa = deletarConversa;
@@ -930,7 +948,6 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarRanking();
     carregarFlashcards();
     carregarRelatorios();
-    // Garantir que o botão de idioma mostre a label correta
     document.getElementById('idioma-label').textContent = usuarioIdioma ? usuarioIdioma.toUpperCase() : 'PT';
 });
 
