@@ -11,7 +11,6 @@
 </head>
 <body>
 
-    <!-- ============ TELA DE LOGIN ============ -->
     <div id="tela-login" class="tela-login">
         <div class="login-container">
             <div class="login-logo"><i class="fas fa-star"></i></div>
@@ -33,7 +32,6 @@
         </div>
     </div>
 
-    <!-- ============ APLICATIVO PRINCIPAL ============ -->
     <div id="app-principal" style="display:none;">
         <header class="top-bar">
             <div class="top-bar-left">
@@ -41,7 +39,7 @@
                 <div class="logo-small"><i class="fas fa-star"></i> Sirius<span>Learn</span></div>
             </div>
             <div class="top-bar-center">
-                <span class="user-greeting" id="saudacao-topo">Olá, <strong>Usuário</strong> <i class="fas fa-star" style="color:#FBBF24; font-size:14px;"></i></span>
+                <span class="user-greeting">Olá, <strong id="saudacao-topo">Usuário</strong> <i class="fas fa-wave-square"></i></span>
             </div>
             <div class="top-bar-right">
                 <button id="btn-nova-conversa" class="btn-new-chat"><i class="fas fa-plus"></i> Nova</button>
@@ -50,7 +48,6 @@
         </header>
 
         <div class="app-body">
-            <!-- ============ DRAWER (MENU LATERAL) ============ -->
             <aside id="drawer" class="drawer">
                 <div class="drawer-header">
                     <h3><i class="fas fa-star"></i> Sirius<span>Learn</span></h3>
@@ -64,7 +61,7 @@
                 <hr />
                 <div class="drawer-ferramentas">
                     <h4><i class="fas fa-tools"></i> Ferramentas</h4>
-                    <button class="drawer-item" data-tab="chat"><i class="fas fa-comment-dots"></i> Chat</button>
+                    <button class="drawer-item active" data-tab="chat"><i class="fas fa-comment"></i> Chat</button>
                     <button class="drawer-item" data-tab="estudo"><i class="fas fa-clock"></i> Estudo</button>
                     <button class="drawer-item" data-tab="flashcards"><i class="fas fa-cards"></i> Flashcards</button>
                     <button class="drawer-item" data-tab="redacao"><i class="fas fa-pen-fancy"></i> Redação</button>
@@ -81,19 +78,17 @@
 
             <div id="drawer-overlay" class="drawer-overlay"></div>
 
-            <!-- ============ CONTEÚDO PRINCIPAL ============ -->
             <main class="main-content">
 
-                <!-- TAB: CHAT -->
                 <section id="tab-chat" class="tab-content active">
                     <div class="chat-container">
                         <div class="chat-header">
                             <div class="chat-header-left">
                                 <h2><i class="fas fa-star"></i> SiriusLearn</h2>
-                                <span class="chat-status"><i class="fas fa-circle" style="color:#4ADE80; font-size:10px;"></i> Online</span>
+                                <span class="chat-status"><i class="fas fa-circle"></i> Online</span>
                             </div>
                             <div class="chat-header-right">
-                                <button id="btn-idioma" class="btn-idioma"><i class="fas fa-globe"></i> <span id="idioma-label">PT</span></button>
+                                <button class="btn-idioma" id="btn-idioma"><i class="fas fa-globe"></i> <span id="idioma-label">PT</span></button>
                             </div>
                         </div>
                         <div class="chat-mensagens" id="chat-mensagens">
@@ -106,10 +101,38 @@
                             </div>
                         </div>
                         <div class="chat-modes" id="chat-modes">
-                            <button class="mode-btn active" data-mode="smart"><i class="fas fa-brain"></i> Smart</button>
-                            <button class="mode-btn" data-mode="deeper"><i class="fas fa-microscope"></i> Think Deeper</button>
-                            <button class="mode-btn" data-mode="learn"><i class="fas fa-graduation-cap"></i> Estude e Aprenda</button>
-                            <button class="mode-btn" data-mode="search"><i class="fas fa-globe"></i> Pesquisar</button>
+                            <div class="mode-item active" data-mode="smart">
+                                <div class="mode-header">
+                                    <span class="mode-icon"><i class="fas fa-brain"></i></span>
+                                    <span class="mode-nome">Smart</span>
+                                    <span class="mode-check"><i class="fas fa-check-circle"></i></span>
+                                </div>
+                                <div class="mode-descricao">Responde de forma equilibrada, adaptando a profundidade conforme a pergunta.</div>
+                            </div>
+                            <div class="mode-item" data-mode="deeper">
+                                <div class="mode-header">
+                                    <span class="mode-icon"><i class="fas fa-microscope"></i></span>
+                                    <span class="mode-nome">Think Deeper</span>
+                                    <span class="mode-check"><i class="fas fa-check-circle"></i></span>
+                                </div>
+                                <div class="mode-descricao">Respostas mais longas, com análises aprofundadas e múltiplas perspectivas.</div>
+                            </div>
+                            <div class="mode-item" data-mode="learn">
+                                <div class="mode-header">
+                                    <span class="mode-icon"><i class="fas fa-graduation-cap"></i></span>
+                                    <span class="mode-nome">Estude e Aprenda</span>
+                                    <span class="mode-check"><i class="fas fa-check-circle"></i></span>
+                                </div>
+                                <div class="mode-descricao">Respostas com perguntas interativas, analogias e exemplos práticos. Guie o aprendizado passo a passo.</div>
+                            </div>
+                            <div class="mode-item" data-mode="search">
+                                <div class="mode-header">
+                                    <span class="mode-icon"><i class="fas fa-globe"></i></span>
+                                    <span class="mode-nome">Pesquisar</span>
+                                    <span class="mode-check"><i class="fas fa-check-circle"></i></span>
+                                </div>
+                                <div class="mode-descricao">Respostas com referências, citações e fontes confiáveis. Inclui a fonte ao final de cada informação.</div>
+                            </div>
                         </div>
                         <div class="chat-input-area">
                             <button id="btn-upload-pdf" class="upload-btn" title="Enviar PDF"><i class="fas fa-paperclip"></i></button>
@@ -119,7 +142,6 @@
                     </div>
                 </section>
 
-                <!-- TAB: ESTUDO -->
                 <section id="tab-estudo" class="tab-content">
                     <h1><i class="fas fa-clock"></i> Sessão de Estudo</h1>
                     <p class="subtitle">Foque, estude e no final a IA gera flashcards e quiz.</p>
@@ -139,25 +161,22 @@
                     </div>
                 </section>
 
-                <!-- TAB: FLASHCARDS -->
                 <section id="tab-flashcards" class="tab-content">
                     <h1><i class="fas fa-cards"></i> Flashcards</h1>
                     <p class="subtitle">Revisão espaçada – revise hoje!</p>
                     <div id="flashcards-lista" class="card"></div>
                 </section>
 
-                <!-- TAB: REDAÇÃO -->
                 <section id="tab-redacao" class="tab-content">
                     <h1><i class="fas fa-pen-fancy"></i> Corretor de Redação</h1>
                     <p class="subtitle">Cole sua redação e receba correção estilo ENEM.</p>
                     <div class="card">
                         <textarea id="texto-redacao" style="min-height:200px;" placeholder="Digite ou cole sua redação aqui..."></textarea>
-                        <button id="btn-corrigir-redacao" class="btn-primary" style="margin-top:12px;"><i class="fas fa-check-circle"></i> Corrigir Redação</button>
+                        <button id="btn-corrigir-redacao" class="btn-primary" style="margin-top:12px;"><i class="fas fa-check"></i> Corrigir Redação</button>
                         <div id="resultado-redacao" style="margin-top:20px; white-space:pre-wrap;"></div>
                     </div>
                 </section>
 
-                <!-- TAB: VESTIBULINHO -->
                 <section id="tab-vestibulinho" class="tab-content">
                     <h1><i class="fas fa-chart-bar"></i> Vestibulinho</h1>
                     <p class="subtitle">20 questões geradas por IA.</p>
@@ -165,7 +184,6 @@
                     <div id="vestibulinho-container"></div>
                 </section>
 
-                <!-- TAB: GRUPO -->
                 <section id="tab-grupo" class="tab-content">
                     <h1><i class="fas fa-users"></i> Grupo de Estudos</h1>
                     <p class="subtitle">Estude com amigos, compartilhe progresso.</p>
@@ -174,11 +192,11 @@
                         <div class="flex-row">
                             <input type="text" id="grupo-nome" placeholder="Nome do grupo" style="flex:2;">
                             <input type="text" id="grupo-descricao" placeholder="Descrição (opcional)" style="flex:3;">
-                            <button id="btn-criar-grupo" class="btn-primary"><i class="fas fa-plus"></i> Criar</button>
+                            <button id="btn-criar-grupo" class="btn-primary"><i class="fas fa-users"></i> Criar</button>
                         </div>
                     </div>
                     <div class="card">
-                        <h3><i class="fas fa-door-open"></i> Entrar em Grupo</h3>
+                        <h3><i class="fas fa-key"></i> Entrar em Grupo</h3>
                         <div class="flex-row">
                             <input type="text" id="grupo-convite" placeholder="Código de convite" style="flex:2;">
                             <button id="btn-entrar-grupo" class="btn-secondary"><i class="fas fa-sign-in-alt"></i> Entrar</button>
@@ -186,30 +204,29 @@
                     </div>
                     <div id="meu-grupo-info" class="card" style="display:none;">
                         <h3 id="grupo-nome-exibido"><i class="fas fa-users"></i> Nome do Grupo</h3>
-                        <p id="grupo-desc-exibido" style="color:#94A3B8;">Descrição</p>
-                        <p><strong>Código:</strong> <span id="grupo-codigo-exibido">XXXXXX</span></p>
+                        <p id="grupo-desc-exibido" style="color:var(--text-secondary);">Descrição</p>
+                        <p><strong><i class="fas fa-key"></i> Código:</strong> <span id="grupo-codigo-exibido">XXXXXX</span></p>
                         <button id="btn-sair-grupo" class="btn-danger" style="margin-top:8px;"><i class="fas fa-sign-out-alt"></i> Sair do Grupo</button>
-                        <hr style="border-color:#2D3448; margin:16px 0;">
-                        <h4><i class="fas fa-user-friends"></i> Membros</h4>
+                        <hr style="border-color:var(--border-color); margin:16px 0;">
+                        <h4><i class="fas fa-list"></i> Membros</h4>
                         <div id="membros-grupo-lista"></div>
-                        <hr style="border-color:#2D3448; margin:16px 0;">
+                        <hr style="border-color:var(--border-color); margin:16px 0;">
                         <h4><i class="fas fa-trophy"></i> Ranking</h4>
                         <div style="display:flex; gap:10px; margin-bottom:8px;">
                             <button id="btn-ranking-semanal" class="btn-secondary" style="flex:1;">Semanal</button>
                             <button id="btn-ranking-mensal" class="btn-secondary" style="flex:1;">Mensal</button>
                         </div>
                         <div id="ranking-grupo-lista"></div>
-                        <hr style="border-color:#2D3448; margin:16px 0;">
-                        <h4><i class="fas fa-comment-dots"></i> Chat do Grupo</h4>
-                        <div id="chat-grupo-mensagens" style="max-height:200px; overflow-y:auto; background:#0B0E14; border-radius:12px; padding:12px; margin-bottom:8px;"></div>
+                        <hr style="border-color:var(--border-color); margin:16px 0;">
+                        <h4><i class="fas fa-comment"></i> Chat do Grupo</h4>
+                        <div id="chat-grupo-mensagens" style="max-height:200px; overflow-y:auto; background:var(--bg-primary); border-radius:12px; padding:12px; margin-bottom:8px;"></div>
                         <div class="flex-row">
                             <input type="text" id="chat-grupo-input" placeholder="Digite uma mensagem..." style="flex:2;">
-                            <button id="btn-chat-grupo-enviar" class="btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
+                            <button id="btn-chat-grupo-enviar" class="btn-primary"><i class="fas fa-paper-plane"></i></button>
                         </div>
                     </div>
                 </section>
 
-                <!-- TAB: AULAS -->
                 <section id="tab-aulas" class="tab-content">
                     <h1><i class="fas fa-video"></i> Aulas</h1>
                     <p class="subtitle">Playlists do YouTube para estudar.</p>
@@ -225,99 +242,43 @@
                     <div id="aulas-lista" class="card"></div>
                 </section>
 
-                <!-- TAB: RELATÓRIOS -->
                 <section id="tab-relatorios" class="tab-content">
                     <h1><i class="fas fa-chart-line"></i> Relatórios</h1>
                     <p class="subtitle">Acompanhe sua evolução.</p>
                     <div class="card">
                         <div class="metric-grid">
                             <div class="metric"><div class="value" id="rel-total">0</div><div class="label"><i class="fas fa-clock"></i> Minutos totais</div></div>
-                            <div class="metric"><div class="value" id="rel-sessoes">0</div><div class="label"><i class="fas fa-book-open"></i> Sessões</div></div>
+                            <div class="metric"><div class="value" id="rel-sessoes">0</div><div class="label"><i class="fas fa-book"></i> Sessões</div></div>
                             <div class="metric"><div class="value" id="rel-flashcards">0</div><div class="label"><i class="fas fa-cards"></i> Flashcards</div></div>
                             <div class="metric"><div class="value" id="rel-racha">0</div><div class="label"><i class="fas fa-fire"></i> Dias seguidos</div></div>
                         </div>
                     </div>
                 </section>
 
-                <!-- ============ TAB: CONFIGURAÇÕES ============ -->
                 <section id="tab-configuracoes" class="tab-content">
-                    <div class="config-page">
-                        <h1><i class="fas fa-cog"></i> Configurações</h1>
-                        <p class="subtitle">Personalize sua experiência no SiriusLearn.</p>
-
+                    <h1><i class="fas fa-cog"></i> Configurações</h1>
+                    <p class="subtitle">Personalize sua experiência no SiriusLearn.</p>
+                    <div class="config-container">
                         <div class="config-card">
                             <div class="config-icon"><i class="fas fa-globe"></i></div>
                             <div class="config-content">
-                                <h3>🌐 Idioma</h3>
-                                <p>Selecione o idioma da interface e das respostas da IA.</p>
+                                <h3>Idioma</h3>
+                                <p>Escolha o idioma da interface e das respostas da IA.</p>
                                 <select id="config-idioma" class="config-select">
-                                    <option value="pt">🇧🇷 Português</option>
-                                    <option value="en">🇺🇸 English</option>
-                                    <option value="es">🇪🇸 Español</option>
+                                    <option value="pt"><i class="fas fa-flag"></i> Português</option>
+                                    <option value="en"><i class="fas fa-flag"></i> English</option>
+                                    <option value="es"><i class="fas fa-flag"></i> Español</option>
                                 </select>
-                                <button class="btn-primary config-save" id="btn-salvar-idioma"><i class="fas fa-save"></i> Salvar</button>
                             </div>
                         </div>
-
                         <div class="config-card">
-                            <div class="config-icon"><i class="fas fa-palette"></i></div>
+                            <div class="config-icon"><i class="fas fa-user"></i></div>
                             <div class="config-content">
-                                <h3>🎨 Tema</h3>
-                                <p>Escolha o modo de cores da interface.</p>
-                                <select id="config-tema" class="config-select">
-                                    <option value="dark">🌙 Escuro</option>
-                                    <option value="light">☀️ Claro</option>
-                                    <option value="auto">🔄 Automático</option>
-                                </select>
-                                <button class="btn-primary config-save" id="btn-salvar-tema"><i class="fas fa-save"></i> Salvar</button>
-                            </div>
-                        </div>
-
-                        <div class="config-card">
-                            <div class="config-icon"><i class="fas fa-robot"></i></div>
-                            <div class="config-content">
-                                <h3>🧠 Personalidade da IA</h3>
-                                <p>Defina o tom das respostas da IA.</p>
-                                <select id="config-personalidade" class="config-select">
-                                    <option value="default">📚 Padrão (didático)</option>
-                                    <option value="formal">🎩 Formal (técnico)</option>
-                                    <option value="casual">😊 Descontraído</option>
-                                    <option value="motivacional">🚀 Motivacional</option>
-                                </select>
-                                <button class="btn-primary config-save" id="btn-salvar-personalidade"><i class="fas fa-save"></i> Salvar</button>
-                            </div>
-                        </div>
-
-                        <div class="config-card">
-                            <div class="config-icon"><i class="fas fa-sync"></i></div>
-                            <div class="config-content">
-                                <h3>🔄 Sincronização</h3>
-                                <p>Última sincronização: <span id="ultima-sincronizacao">hoje 14:30</span></p>
-                                <button class="btn-secondary" id="btn-sincronizar"><i class="fas fa-sync"></i> Sincronizar agora</button>
-                            </div>
-                        </div>
-
-                        <div class="config-card">
-                            <div class="config-icon"><i class="fas fa-database"></i></div>
-                            <div class="config-content">
-                                <h3>📊 Dados</h3>
-                                <p>Gerencie seus dados salvos no SiriusLearn.</p>
-                                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                                    <button class="btn-secondary" id="btn-exportar-dados"><i class="fas fa-download"></i> Exportar dados</button>
-                                    <button class="btn-danger" id="btn-limpar-dados"><i class="fas fa-trash"></i> Limpar dados</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="config-card">
-                            <div class="config-icon"><i class="fas fa-user-cog"></i></div>
-                            <div class="config-content">
-                                <h3>🔐 Conta</h3>
-                                <p>Gerencie suas informações de conta.</p>
-                                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                                    <button class="btn-secondary" id="btn-alterar-nome"><i class="fas fa-pencil-alt"></i> Alterar nome</button>
+                                <h3>Conta</h3>
+                                <p>Gerencie suas informações pessoais.</p>
+                                <div class="config-buttons">
+                                    <button class="btn-secondary" id="btn-editar-nome"><i class="fas fa-pencil-alt"></i> Alterar nome</button>
                                     <button class="btn-secondary" id="btn-alterar-senha"><i class="fas fa-key"></i> Alterar senha</button>
-                                    <button class="btn-danger" id="btn-sair-config"><i class="fas fa-sign-out-alt"></i> Sair</button>
                                 </div>
                             </div>
                         </div>
@@ -325,36 +286,6 @@
                 </section>
 
             </main>
-        </div>
-    </div>
-
-    <!-- ============ MODAL DE IDIOMAS ============ -->
-    <div class="modal-overlay" id="modal-idioma">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-globe"></i> Escolha seu idioma</h3>
-                <button class="modal-close" id="modal-idioma-close"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="idioma-opcao" data-idioma="pt">
-                    <span class="idioma-bandeira">🇧🇷</span>
-                    <span class="idioma-nome">Português</span>
-                    <span class="idioma-check"><i class="fas fa-check-circle"></i></span>
-                </div>
-                <div class="idioma-opcao" data-idioma="en">
-                    <span class="idioma-bandeira">🇺🇸</span>
-                    <span class="idioma-nome">English</span>
-                    <span class="idioma-check"><i class="fas fa-check-circle"></i></span>
-                </div>
-                <div class="idioma-opcao" data-idioma="es">
-                    <span class="idioma-bandeira">🇪🇸</span>
-                    <span class="idioma-nome">Español</span>
-                    <span class="idioma-check"><i class="fas fa-check-circle"></i></span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-primary" id="modal-idioma-salvar"><i class="fas fa-save"></i> Salvar</button>
-            </div>
         </div>
     </div>
 
