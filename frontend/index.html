@@ -59,6 +59,11 @@
                     <button id="btn-nova-conversa-drawer" class="btn-new-conversa"><i class="fas fa-plus"></i> Nova conversa</button>
                 </div>
                 <hr />
+                <div class="drawer-topicos">
+                    <h4><i class="fas fa-list-ul"></i> Tópicos da conversa</h4>
+                    <div id="lista-topicos"></div>
+                </div>
+                <hr />
                 <div class="drawer-ferramentas">
                     <h4><i class="fas fa-tools"></i> Ferramentas</h4>
                     <button class="drawer-item active" data-tab="chat"><i class="fas fa-comment"></i> Chat</button>
@@ -88,6 +93,12 @@
                                 <span class="chat-status"><i class="fas fa-circle"></i> Online</span>
                             </div>
                             <div class="chat-header-right">
+                                <select id="modo-select" class="modo-select">
+                                    <option value="smart">🧠 Smart</option>
+                                    <option value="deeper">🔬 Think Deeper</option>
+                                    <option value="learn">📚 Estude e Aprenda</option>
+                                    <option value="search">🌐 Pesquisar</option>
+                                </select>
                                 <button class="btn-idioma" id="btn-idioma"><i class="fas fa-globe"></i> <span id="idioma-label">PT</span></button>
                             </div>
                         </div>
@@ -98,40 +109,6 @@
                                     <h1 class="saudacao-titulo">Olá!</h1>
                                     <p class="saudacao-subtitulo">Como posso ajudar você hoje?</p>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="chat-modes" id="chat-modes">
-                            <div class="mode-item active" data-mode="smart">
-                                <div class="mode-header">
-                                    <span class="mode-icon"><i class="fas fa-brain"></i></span>
-                                    <span class="mode-nome">Smart</span>
-                                    <span class="mode-check"><i class="fas fa-check-circle"></i></span>
-                                </div>
-                                <div class="mode-descricao">Responde de forma equilibrada, adaptando a profundidade conforme a pergunta.</div>
-                            </div>
-                            <div class="mode-item" data-mode="deeper">
-                                <div class="mode-header">
-                                    <span class="mode-icon"><i class="fas fa-microscope"></i></span>
-                                    <span class="mode-nome">Think Deeper</span>
-                                    <span class="mode-check"><i class="fas fa-check-circle"></i></span>
-                                </div>
-                                <div class="mode-descricao">Respostas mais longas, com análises aprofundadas e múltiplas perspectivas.</div>
-                            </div>
-                            <div class="mode-item" data-mode="learn">
-                                <div class="mode-header">
-                                    <span class="mode-icon"><i class="fas fa-graduation-cap"></i></span>
-                                    <span class="mode-nome">Estude e Aprenda</span>
-                                    <span class="mode-check"><i class="fas fa-check-circle"></i></span>
-                                </div>
-                                <div class="mode-descricao">Respostas com perguntas interativas, analogias e exemplos práticos. Guie o aprendizado passo a passo.</div>
-                            </div>
-                            <div class="mode-item" data-mode="search">
-                                <div class="mode-header">
-                                    <span class="mode-icon"><i class="fas fa-globe"></i></span>
-                                    <span class="mode-nome">Pesquisar</span>
-                                    <span class="mode-check"><i class="fas fa-check-circle"></i></span>
-                                </div>
-                                <div class="mode-descricao">Respostas com referências, citações e fontes confiáveis. Inclui a fonte ao final de cada informação.</div>
                             </div>
                         </div>
                         <div class="chat-input-area">
@@ -265,9 +242,9 @@
                                 <h3>Idioma</h3>
                                 <p>Escolha o idioma da interface e das respostas da IA.</p>
                                 <select id="config-idioma" class="config-select">
-                                    <option value="pt"><i class="fas fa-flag"></i> Português</option>
-                                    <option value="en"><i class="fas fa-flag"></i> English</option>
-                                    <option value="es"><i class="fas fa-flag"></i> Español</option>
+                                    <option value="pt">🇧🇷 Português</option>
+                                    <option value="en">🇺🇸 English</option>
+                                    <option value="es">🇪🇸 Español</option>
                                 </select>
                             </div>
                         </div>
