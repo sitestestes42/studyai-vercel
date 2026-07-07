@@ -93,12 +93,16 @@
                                 <span class="chat-status"><i class="fas fa-circle"></i> Online</span>
                             </div>
                             <div class="chat-header-right">
-                                <select id="modo-select" class="modo-select">
-                                    <option value="smart">🧠 Smart</option>
-                                    <option value="deeper">🔬 Think Deeper</option>
-                                    <option value="learn">📚 Estude e Aprenda</option>
-                                    <option value="search">🌐 Pesquisar</option>
-                                </select>
+                                <!-- TOGGLE MODO ESTUDO / COTIDIANO -->
+                                <div class="modo-toggle-wrapper">
+                                    <span class="modo-label" id="modo-label-esquerda">🎓 Estudo</span>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="modo-toggle" />
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    <span class="modo-label" id="modo-label-direita">🌍 Cotidiano</span>
+                                </div>
+                                <select id="modo-select" class="modo-select" style="display:none;"></select>
                                 <button class="btn-idioma" id="btn-idioma"><i class="fas fa-globe"></i> <span id="idioma-label">PT</span></button>
                             </div>
                         </div>
