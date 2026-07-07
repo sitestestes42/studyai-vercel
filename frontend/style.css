@@ -31,6 +31,56 @@ body {
 }
 
 /* ============================================================
+   BARRA DE ROLAGEM PERSONALIZADA
+   ============================================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--cor-primaria);
+    border-radius: 10px;
+    transition: 0.3s;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--cor-primaria-hover);
+    box-shadow: 0 0 10px var(--cor-glow);
+}
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--cor-primaria) var(--bg-primary);
+}
+
+.chat-mensagens::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-mensagens::-webkit-scrollbar-track {
+    background: transparent;
+}
+.chat-mensagens::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+}
+.chat-mensagens::-webkit-scrollbar-thumb:hover {
+    background: var(--cor-primaria);
+}
+
+.drawer::-webkit-scrollbar {
+    width: 4px;
+}
+.drawer::-webkit-scrollbar-track {
+    background: transparent;
+}
+.drawer::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+}
+
+/* ============================================================
    LOGIN
    ============================================================ */
 .tela-login {
@@ -619,6 +669,8 @@ input:focus, select:focus, textarea:focus {
     padding: 8px 0 4px 0;
     border-bottom: 1px solid var(--border-light);
     margin-bottom: 4px;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .chat-header-left {
@@ -652,66 +704,61 @@ input:focus, select:focus, textarea:focus {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
-/* ===== TOGGLE MODO ESTUDO / COTIDIANO ===== */
-.modo-toggle-wrapper {
+/* ============================================================
+   TOGGLE DO MODO PAI (ESTUDO / COTIDIANO)
+   ============================================================ */
+.modo-pai-toggle {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: var(--bg-input);
-    padding: 4px 12px;
-    border-radius: 30px;
-    border: 1px solid var(--border-color);
+    gap: 6px;
 }
-.modo-label {
+.modo-pai-label {
     font-size: 12px;
-    font-weight: 500;
     color: var(--text-muted);
     transition: 0.2s;
+    font-weight: 500;
     white-space: nowrap;
 }
-.modo-label.ativo {
-    color: var(--text-primary);
-}
-
-.toggle-switch {
+.switch {
     position: relative;
+    display: inline-block;
     width: 40px;
     height: 22px;
-    display: inline-block;
-    cursor: pointer;
 }
-.toggle-switch input {
+.switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
-.toggle-slider {
+.slider {
     position: absolute;
+    cursor: pointer;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--border-color);
-    border-radius: 30px;
+    background-color: var(--border-color);
     transition: 0.3s;
+    border-radius: 22px;
 }
-.toggle-slider::before {
-    content: '';
+.slider:before {
     position: absolute;
+    content: "";
     height: 16px;
     width: 16px;
     left: 3px;
     bottom: 3px;
-    background: white;
-    border-radius: 50%;
+    background-color: white;
     transition: 0.3s;
+    border-radius: 50%;
 }
-.toggle-switch input:checked + .toggle-slider {
-    background: var(--cor-primaria);
+.switch input:checked + .slider {
+    background-color: var(--cor-primaria);
 }
-.toggle-switch input:checked + .toggle-slider::before {
+.switch input:checked + .slider:before {
     transform: translateX(18px);
 }
 
@@ -725,7 +772,6 @@ input:focus, select:focus, textarea:focus {
     cursor: pointer;
     outline: none;
     transition: 0.2s;
-    min-width: 140px;
 }
 .modo-select:hover {
     border-color: var(--cor-primaria);
@@ -738,7 +784,7 @@ input:focus, select:focus, textarea:focus {
     background: var(--bg-card);
 }
 
-.chat-header-right .btn-idioma {
+.btn-idioma {
     background: transparent;
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -748,14 +794,17 @@ input:focus, select:focus, textarea:focus {
     cursor: pointer;
     transition: 0.2s;
 }
-.chat-header-right .btn-idioma:hover {
+.btn-idioma:hover {
     background: var(--bg-hover);
     color: var(--text-primary);
 }
-.chat-header-right .btn-idioma i {
+.btn-idioma i {
     margin-right: 4px;
 }
 
+/* ============================================================
+   MENSAGENS DO CHAT
+   ============================================================ */
 .chat-mensagens {
     flex: 1;
     overflow-y: auto;
@@ -817,20 +866,23 @@ input:focus, select:focus, textarea:focus {
 
 .mensagem {
     margin-bottom: 12px;
-    padding: 12px 16px;
+    padding: 14px 18px;
     border-radius: 16px;
     max-width: 80%;
     word-wrap: break-word;
     animation: fadeInUp 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    transition: 0.2s;
 }
 .mensagem.usuario {
-    background: var(--bg-secondary);
+    background: var(--cor-gradiente);
     align-self: flex-end;
     margin-left: auto;
     text-align: right;
     border-bottom-right-radius: 4px;
-    border: 1px solid var(--border-color);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 15px rgba(30, 144, 255, 0.2);
 }
 .mensagem.ia {
     background: var(--bg-card);
@@ -838,8 +890,14 @@ input:focus, select:focus, textarea:focus {
     border-bottom-left-radius: 4px;
     align-self: flex-start;
     border: 1px solid var(--border-light);
-    border-left-width: 3px;
+    border-left-width: 4px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
+.mensagem.ia:hover {
+    border-color: var(--cor-primaria);
+    box-shadow: 0 4px 20px rgba(30, 144, 255, 0.05);
+}
+
 .mensagem.ia .fontes {
     margin-top: 8px;
     padding: 8px 12px;
@@ -1117,12 +1175,7 @@ input:focus, select:focus, textarea:focus {
     .chat-input-area { padding: 4px 4px 4px 14px; }
     .chat-input-area input { font-size: 14px; padding: 10px 0; }
     .chat-input-area button { width: 40px; height: 40px; font-size: 16px; }
-    .modo-toggle-wrapper { padding: 2px 8px; gap: 4px; }
-    .modo-label { font-size: 10px; }
-    .toggle-switch { width: 32px; height: 18px; }
-    .toggle-slider::before { height: 12px; width: 12px; left: 3px; bottom: 3px; }
-    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(14px); }
-    .modo-select { font-size: 12px; padding: 4px 8px; min-width: 100px; }
+    .modo-select { font-size: 12px; padding: 4px 8px; }
     .config-card { flex-direction: column; align-items: center; text-align: center; }
     .config-buttons { justify-content: center; }
     .config-select { max-width: 100%; }
@@ -1130,16 +1183,20 @@ input:focus, select:focus, textarea:focus {
     .btn-sair { font-size: 12px; padding: 4px 10px; }
     .metric-grid { grid-template-columns: 1fr 1fr; }
     .drawer-topicos #lista-topicos { max-height: 120px; }
+    .chat-header-right { gap: 6px; }
+    .modo-pai-toggle .modo-pai-label { font-size: 10px; }
+    .switch { width: 34px; height: 20px; }
+    .slider:before { height: 14px; width: 14px; left: 3px; bottom: 3px; }
+    .switch input:checked + .slider:before { transform: translateX(14px); }
 }
 @media (max-width: 480px) {
     .saudacao-titulo { font-size: 24px; }
     .metric-grid { grid-template-columns: 1fr; }
-    .chat-header-right { gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-    .modo-toggle-wrapper { padding: 2px 6px; }
-    .modo-label { font-size: 9px; }
-    .toggle-switch { width: 28px; height: 16px; }
-    .toggle-slider::before { height: 10px; width: 10px; left: 3px; bottom: 3px; }
-    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(12px); }
-    .modo-select { font-size: 11px; padding: 2px 6px; min-width: 80px; }
+    .chat-header-right { gap: 4px; }
+    .modo-select { font-size: 11px; padding: 2px 6px; max-width: 100px; }
     .btn-idioma { font-size: 11px; padding: 2px 8px; }
+    .modo-pai-toggle .modo-pai-label { font-size: 9px; }
+    .switch { width: 30px; height: 18px; }
+    .slider:before { height: 12px; width: 12px; left: 3px; bottom: 3px; }
+    .switch input:checked + .slider:before { transform: translateX(12px); }
 }
