@@ -23,6 +23,7 @@ var conversas = [];
 var usuarioNomeExibicao = '';
 var usuarioIdioma = 'pt';
 var modoAtual = 'smart';
+var modoPai = 'estudo'; // 'estudo' ou 'cotidiano'
 var topicos = [];
 
 // ================================================================
@@ -166,7 +167,16 @@ async function entrarNoApp(user) {
             .select('nome_exibicao, idioma')
             .eq('id', user.id)
             .single();
-        if (!error && data) {
+
+        if (error && error.code === 'PGRST116') {
+            var nome = user.email.split('@')[0];
+            var { error: insertError } = await supabaseClient
+                .from('usuarios')
+                .insert({ id: user.id, nome_exibicao: nome, idioma: 'pt' });
+            if (insertError) throw insertError;
+            usuarioNomeExibicao = nome;
+            usuarioIdioma = 'pt';
+        } else if (!error && data) {
             usuarioNomeExibicao = data.nome_exibicao || user.email.split('@')[0];
             usuarioIdioma = data.idioma || 'pt';
         } else {
@@ -174,6 +184,7 @@ async function entrarNoApp(user) {
             usuarioIdioma = 'pt';
         }
     } catch (e) {
+        console.error('Erro ao carregar usuário:', e);
         usuarioNomeExibicao = user.email.split('@')[0];
         usuarioIdioma = 'pt';
     }
@@ -184,6 +195,15 @@ async function entrarNoApp(user) {
     window.usuarioIdioma = usuarioIdioma;
 
     document.getElementById('idioma-label').textContent = usuarioIdioma.toUpperCase();
+
+    // Carregar modo pai salvo
+    var modoPaiSalvo = localStorage.getItem('siriuslearn_modo_pai');
+    if (modoPaiSalvo === 'cotidiano' || modoPaiSalvo === 'estudo') {
+        modoPai = modoPaiSalvo;
+    } else {
+        modoPai = 'estudo';
+    }
+    atualizarToggleModo();
 
     carregarDadosUsuario();
     carregarConversas();
@@ -222,30 +242,128 @@ async function chamarGroq(prompt) {
 }
 
 // ================================================================
-//  MODOS
+//  MODOS (INTERNOS)
 // ================================================================
 var modosInfo = {
-    smart: {
+    // MODO ESTUDO
+    estudo_smart: {
         nome: 'Smart',
         prompt: 'Responda de forma equilibrada, adaptando a profundidade conforme a pergunta. Seja claro e objetivo.'
     },
-    deeper: {
+    estudo_deeper: {
         nome: 'Think Deeper',
         prompt: 'Responda com análises aprofundadas, múltiplas perspectivas e detalhamento completo. Explore o tema em profundidade.'
     },
-    learn: {
+    estudo_learn: {
         nome: 'Estude e Aprenda',
         prompt: 'Responda com perguntas interativas, analogias e exemplos práticos. Guie o aprendizado passo a passo.'
     },
-    search: {
+    estudo_search: {
         nome: 'Pesquisar',
         prompt: 'Responda com referências, citações e fontes confiáveis. Inclua a fonte ao final de cada informação relevante.'
+    },
+    // MODO COTIDIANO
+    cotidiano_pratico: {
+        nome: 'Prático',
+        prompt: 'Responda de forma direta, prática e acionável. Foque em soluções e dicas úteis para o dia a dia.'
+    },
+    cotidiano_inspire: {
+        nome: 'Inspire-se',
+        prompt: 'Responda com motivação, encorajamento e sugestões para melhorar a rotina e o bem-estar.'
+    },
+    cotidiano_explique: {
+        nome: 'Explique',
+        prompt: 'Responda de forma simples, sem jargões, usando analogias e exemplos cotidianos.'
+    },
+    cotidiano_liste: {
+        nome: 'Liste',
+        prompt: 'Responda com listas, passos, checklists ou tópicos organizados para facilitar a ação.'
     }
 };
 
-function getModoPrompt(modo) {
-    return modosInfo[modo] ? modosInfo[modo].prompt : modosInfo.smart.prompt;
+function getModosInternos(modoPai) {
+    if (modoPai === 'estudo') {
+        return [
+            { id: 'estudo_smart', nome: 'Smart' },
+            { id: 'estudo_deeper', nome: 'Think Deeper' },
+            { id: 'estudo_learn', nome: 'Estude e Aprenda' },
+            { id: 'estudo_search', nome: 'Pesquisar' }
+        ];
+    } else {
+        return [
+            { id: 'cotidiano_pratico', nome: 'Prático' },
+            { id: 'cotidiano_inspire', nome: 'Inspire-se' },
+            { id: 'cotidiano_explique', nome: 'Explique' },
+            { id: 'cotidiano_liste', nome: 'Liste' }
+        ];
+    }
 }
+
+function getModoPrompt(modoId) {
+    return modosInfo[modoId] ? modosInfo[modoId].prompt : modosInfo.estudo_smart.prompt;
+}
+
+function getPromptModoPai(modoPai) {
+    if (modoPai === 'estudo') {
+        return 'Você é o SiriusLearn no modo ESTUDO. Seja didático, aprofundado e use exemplos teóricos. Responda com clareza e organização.';
+    } else {
+        return 'Você é o SiriusLearn no modo COTIDIANO. Seja prático, direto e use exemplos da vida real. Foque em soluções acionáveis.';
+    }
+}
+
+// ================================================================
+//  TOGGLE MODO ESTUDO / COTIDIANO
+// ================================================================
+function atualizarToggleModo() {
+    var toggle = document.getElementById('modo-toggle');
+    var labelEsq = document.getElementById('modo-label-esquerda');
+    var labelDir = document.getElementById('modo-label-direita');
+
+    if (toggle) {
+        toggle.checked = (modoPai === 'cotidiano');
+    }
+    if (labelEsq) {
+        labelEsq.classList.toggle('ativo', modoPai === 'estudo');
+    }
+    if (labelDir) {
+        labelDir.classList.toggle('ativo', modoPai === 'cotidiano');
+    }
+
+    // Atualizar o dropdown de modos internos
+    atualizarModosInternos();
+    localStorage.setItem('siriuslearn_modo_pai', modoPai);
+}
+
+function atualizarModosInternos() {
+    var select = document.getElementById('modo-select');
+    if (!select) return;
+    var modos = getModosInternos(modoPai);
+    var currentValue = select.value;
+    // Verificar se o valor atual ainda é válido
+    var valido = modos.some(function(m) { return m.id === currentValue; });
+    if (!valido) {
+        currentValue = modos[0].id;
+    }
+    select.innerHTML = '';
+    modos.forEach(function(m) {
+        var opt = document.createElement('option');
+        opt.value = m.id;
+        opt.textContent = m.nome;
+        select.appendChild(opt);
+    });
+    select.value = currentValue || modos[0].id;
+    modoAtual = select.value;
+}
+
+document.getElementById('modo-toggle').addEventListener('change', function() {
+    if (this.checked) {
+        modoPai = 'cotidiano';
+    } else {
+        modoPai = 'estudo';
+    }
+    atualizarToggleModo();
+    // Mudar saudação? Não – mantemos a mesma.
+});
 
 // ================================================================
 //  CONFIGURAÇÕES
@@ -266,7 +384,6 @@ async function carregarConfiguracoes() {
 
     var btnAlterarSenha = document.getElementById('btn-alterar-senha');
     if (btnAlterarSenha) {
-        btnAlterarSenha.removeEventListener('click', function() {});
         btnAlterarSenha.addEventListener('click', function() {
             alert('Funcionalidade em desenvolvimento. Em breve você poderá alterar sua senha.');
         });
@@ -274,10 +391,18 @@ async function carregarConfiguracoes() {
 
     var modoSelect = document.getElementById('modo-select');
     if (modoSelect) {
-        modoSelect.value = modoAtual;
         modoSelect.removeEventListener('change', onModoChange);
         modoSelect.addEventListener('change', onModoChange);
+        // Inicializar com o modo atual
+        var modos = getModosInternos(modoPai);
+        if (modos.length > 0) {
+            modoSelect.value = modos[0].id;
+            modoAtual = modoSelect.value;
+        }
     }
+
+    // Inicializar toggle com o estado salvo
+    atualizarToggleModo();
 }
 
 function onIdiomaChange(e) {
@@ -347,13 +472,15 @@ window.salvarNomeUsuario = async function() {
 };
 
 // ================================================================
-//  SAUDAÇÃO
+//  SAUDAÇÃO CENTRALIZADA
 // ================================================================
 function mostrarSaudacaoIA() {
     var chatMsg = document.getElementById('chat-mensagens');
     chatMsg.innerHTML = '';
-    var saudacao = '✨ Olá! Como posso ajudar você hoje?';
-    adicionarMensagemStreaming(saudacao, 'ia');
+    var saudacaoContainer = document.getElementById('saudacao-container');
+    if (saudacaoContainer) {
+        saudacaoContainer.style.display = 'flex';
+    }
 }
 
 // ================================================================
@@ -387,6 +514,11 @@ function adicionarMensagemLocal(texto, tipo) {
     div.innerHTML = texto;
     chatMsg.appendChild(div);
     chatMsg.scrollTop = chatMsg.scrollHeight;
+    // Oculta saudação centralizada quando há mensagens
+    var saudacaoContainer = document.getElementById('saudacao-container');
+    if (saudacaoContainer) {
+        saudacaoContainer.style.display = 'none';
+    }
 }
 
 function mostrarDigitando() {
@@ -620,14 +752,15 @@ async function enviarPergunta(pergunta) {
 
     try {
         var modoPrompt = getModoPrompt(modoAtual);
+        var promptModoPai = getPromptModoPai(modoPai);
         var idiomaNome = usuarioIdioma === 'pt' ? 'português' : usuarioIdioma === 'en' ? 'inglês' : 'espanhol';
-        var systemPrompt = 'Você é o SiriusLearn. ' + modoPrompt + ' Responda SEMPRE em ' + idiomaNome + '.';
+        var systemPrompt = promptModoPai + ' ' + modoPrompt + ' Responda SEMPRE em ' + idiomaNome + '.';
         var promptCompleto = systemPrompt + ' Pergunta: ' + pergunta;
         var resp = await chamarGroq(promptCompleto);
         removerDigitando(loading);
 
         var fontes = [];
-        if (modoAtual === 'search') {
+        if (modoAtual === 'estudo_search' || modoAtual === 'cotidiano_pesquisar') {
             var fontesMatch = resp.match(/(Fonte[s]?|Referência[s]?|Baseado em):\s*(.*?)(?=\n\n|$)/gi);
             if (fontesMatch) {
                 fontes = fontesMatch.map(function(f) { return f.trim(); });
@@ -868,6 +1001,10 @@ async function carregarMensagensConversa(conversaId) {
             mostrarSaudacaoIA();
             return;
         }
+        var saudacaoContainer = document.getElementById('saudacao-container');
+        if (saudacaoContainer) {
+            saudacaoContainer.style.display = 'none';
+        }
         data.forEach(function(msg) {
             var div = document.createElement('div');
             div.className = 'mensagem ' + msg.tipo;
@@ -952,7 +1089,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ================================================================
-//  GRUPOS
+//  GRUPOS (mantido)
 // ================================================================
 async function carregarGrupoDoUsuario() {
     if (!usuarioAtual) return;
