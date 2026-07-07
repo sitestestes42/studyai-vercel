@@ -1,10 +1,11 @@
 // ============================================================
 // CONFIGURAÇÃO SUPABASE
-// No início do arquivo script.js
+// ============================================================
 const SUPABASE_URL = 'https://vpihrpqvzrmixxdrqwbj.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_ucBzmjp0Xbwi7Z-RHsk4Yg_LydKnMMZ';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Cria cliente com nome único para evitar conflito com a variável global
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ============================================================
 // VARIÁVEIS GLOBAIS
@@ -23,15 +24,12 @@ let streamController = null;
 // ============================================================
 const traducoes = {
     pt: {
-        // Login
         login_subtitle: 'Sua IA de estudos',
         login_entrar: 'Entrar',
         login_google: 'Entrar com Google',
         login_cadastro: 'Criar conta',
         login_recuperar: 'Esqueci a senha',
-        // Top bar
         btn_nova: 'Nova',
-        // Drawer
         drawer_conversas: 'Conversas',
         drawer_nova_conv: 'Nova conversa',
         drawer_topicos: 'Tópicos da conversa',
@@ -44,42 +42,33 @@ const traducoes = {
         drawer_aulas: 'Aulas',
         drawer_relatorios: 'Relatórios',
         drawer_configuracoes: 'Configurações',
-        // Chat
         chat_status: 'Online',
         chat_placeholder_estudo: 'Digite sua pergunta sobre estudos...',
         chat_placeholder_cotidiano: 'Digite sua pergunta sobre o dia a dia...',
-        // Saudação
         saudacao_titulo: 'Olá!',
         saudacao_subtitulo: 'Como posso ajudar você hoje?',
-        // Modos (estudo)
         modo_smart: '🧠 Smart',
         modo_deeper: '🔬 Think Deeper',
         modo_learn: '📚 Estude e Aprenda',
         modo_search: '🌐 Pesquisar',
-        // Modos (cotidiano)
         modo_pratico: '⚡ Prático',
         modo_inspire: '💡 Inspire-se',
         modo_explique: '📝 Explique',
         modo_liste: '📋 Liste',
-        // Estudo
         estudo_titulo: 'Sessão de Estudo',
         estudo_subtitulo: 'Foque, estude e no final a IA gera flashcards e quiz.',
         estudo_iniciar: 'Iniciar',
         estudo_finalizar: 'Finalizar',
         pos_estudo_titulo: 'O que você estudou?',
         pos_gerar: 'Gerar Flashcards e Quiz',
-        // Flashcards
         flashcards_titulo: 'Flashcards',
         flashcards_subtitulo: 'Revisão espaçada – revise hoje!',
-        // Redação
         redacao_titulo: 'Corretor de Redação',
         redacao_subtitulo: 'Cole sua redação e receba correção estilo ENEM.',
         redacao_corrigir: 'Corrigir Redação',
-        // Vestibulinho
         vest_titulo: 'Vestibulinho',
         vest_subtitulo: '20 questões geradas por IA.',
         vest_gerar: 'Gerar Simulado',
-        // Grupo
         grupo_titulo: 'Grupo de Estudos',
         grupo_subtitulo: 'Estude com amigos, compartilhe progresso.',
         grupo_criar_titulo: 'Criar Grupo',
@@ -92,19 +81,16 @@ const traducoes = {
         grupo_ranking_semanal: 'Semanal',
         grupo_ranking_mensal: 'Mensal',
         grupo_chat_titulo: 'Chat do Grupo',
-        // Aulas
         aulas_titulo: 'Aulas',
         aulas_subtitulo: 'Playlists do YouTube para estudar.',
         aulas_add_titulo: 'Adicionar Aula',
         aulas_add_btn: 'Adicionar',
-        // Relatórios
         rel_titulo: 'Relatórios',
         rel_subtitulo: 'Acompanhe sua evolução.',
         rel_total: 'Minutos totais',
         rel_sessoes: 'Sessões',
         rel_flashcards: 'Flashcards',
         rel_racha: 'Dias seguidos',
-        // Configurações
         config_titulo: 'Configurações',
         config_subtitulo: 'Personalize sua experiência no SiriusLearn.',
         config_idioma_titulo: 'Idioma',
@@ -279,20 +265,31 @@ function t(chave) {
 
 function aplicarTraducao() {
     // Login
-    document.getElementById('login-subtitle').textContent = t('login_subtitle');
-    document.getElementById('login-btn-text').textContent = t('login_entrar');
-    document.getElementById('login-google-text').textContent = t('login_google');
-    document.getElementById('link-cadastro').textContent = t('login_cadastro');
-    document.getElementById('link-recuperar').textContent = t('login_recuperar');
+    const loginSubtitle = document.getElementById('login-subtitle');
+    if (loginSubtitle) loginSubtitle.textContent = t('login_subtitle');
+    const loginBtnText = document.getElementById('login-btn-text');
+    if (loginBtnText) loginBtnText.textContent = t('login_entrar');
+    const loginGoogleText = document.getElementById('login-google-text');
+    if (loginGoogleText) loginGoogleText.textContent = t('login_google');
+    const linkCadastro = document.getElementById('link-cadastro');
+    if (linkCadastro) linkCadastro.textContent = t('login_cadastro');
+    const linkRecuperar = document.getElementById('link-recuperar');
+    if (linkRecuperar) linkRecuperar.textContent = t('login_recuperar');
 
     // Top bar
-    document.getElementById('btn-nova-text').textContent = t('btn_nova');
+    const btnNovaText = document.getElementById('btn-nova-text');
+    if (btnNovaText) btnNovaText.textContent = t('btn_nova');
 
     // Drawer
-    document.getElementById('drawer-conversas-titulo').textContent = t('drawer_conversas');
-    document.getElementById('drawer-nova-conv').textContent = t('drawer_nova_conv');
-    document.getElementById('drawer-topicos-titulo').textContent = t('drawer_topicos');
-    document.getElementById('drawer-ferramentas-titulo').textContent = t('drawer_ferramentas');
+    const drawerConversas = document.getElementById('drawer-conversas-titulo');
+    if (drawerConversas) drawerConversas.textContent = t('drawer_conversas');
+    const drawerNovaConv = document.getElementById('drawer-nova-conv');
+    if (drawerNovaConv) drawerNovaConv.textContent = t('drawer_nova_conv');
+    const drawerTopicos = document.getElementById('drawer-topicos-titulo');
+    if (drawerTopicos) drawerTopicos.textContent = t('drawer_topicos');
+    const drawerFerramentas = document.getElementById('drawer-ferramentas-titulo');
+    if (drawerFerramentas) drawerFerramentas.textContent = t('drawer_ferramentas');
+
     document.querySelectorAll('.drawer-item').forEach(el => {
         const span = el.querySelector('span');
         if (span) {
@@ -313,80 +310,125 @@ function aplicarTraducao() {
     });
 
     // Chat
-    document.getElementById('chat-status-text').textContent = t('chat_status');
-    document.getElementById('saudacao-titulo').textContent = t('saudacao_titulo');
-    document.getElementById('saudacao-subtitulo').textContent = t('saudacao_subtitulo');
+    const chatStatus = document.getElementById('chat-status-text');
+    if (chatStatus) chatStatus.textContent = t('chat_status');
+    const saudacaoTitulo = document.getElementById('saudacao-titulo');
+    if (saudacaoTitulo) saudacaoTitulo.textContent = t('saudacao_titulo');
+    const saudacaoSubtitulo = document.getElementById('saudacao-subtitulo');
+    if (saudacaoSubtitulo) saudacaoSubtitulo.textContent = t('saudacao_subtitulo');
     atualizarPlaceholderChat();
 
     // Modos (submodos) - serão atualizados pelo toggle
     atualizarModos();
 
     // Estudo
-    document.getElementById('estudo-titulo').textContent = t('estudo_titulo');
-    document.getElementById('estudo-subtitulo').textContent = t('estudo_subtitulo');
-    document.getElementById('estudo-iniciar').textContent = t('estudo_iniciar');
-    document.getElementById('estudo-finalizar').textContent = t('estudo_finalizar');
-    document.getElementById('pos-estudo-titulo').textContent = t('pos_estudo_titulo');
-    document.getElementById('pos-gerar').textContent = t('pos_gerar');
+    document.querySelectorAll('[id^="estudo-"]').forEach(el => {
+        if (el.id === 'estudo-titulo') el.textContent = t('estudo_titulo');
+        else if (el.id === 'estudo-subtitulo') el.textContent = t('estudo_subtitulo');
+        else if (el.id === 'estudo-iniciar') el.textContent = t('estudo_iniciar');
+        else if (el.id === 'estudo-finalizar') el.textContent = t('estudo_finalizar');
+        else if (el.id === 'pos-estudo-titulo') el.textContent = t('pos_estudo_titulo');
+        else if (el.id === 'pos-gerar') el.textContent = t('pos_gerar');
+    });
 
     // Flashcards
-    document.getElementById('flashcards-titulo').textContent = t('flashcards_titulo');
-    document.getElementById('flashcards-subtitulo').textContent = t('flashcards_subtitulo');
+    const flashcardsTitulo = document.getElementById('flashcards-titulo');
+    if (flashcardsTitulo) flashcardsTitulo.textContent = t('flashcards_titulo');
+    const flashcardsSubtitulo = document.getElementById('flashcards-subtitulo');
+    if (flashcardsSubtitulo) flashcardsSubtitulo.textContent = t('flashcards_subtitulo');
 
     // Redação
-    document.getElementById('redacao-titulo').textContent = t('redacao_titulo');
-    document.getElementById('redacao-subtitulo').textContent = t('redacao_subtitulo');
-    document.getElementById('redacao-corrigir').textContent = t('redacao_corrigir');
+    const redacaoTitulo = document.getElementById('redacao-titulo');
+    if (redacaoTitulo) redacaoTitulo.textContent = t('redacao_titulo');
+    const redacaoSubtitulo = document.getElementById('redacao-subtitulo');
+    if (redacaoSubtitulo) redacaoSubtitulo.textContent = t('redacao_subtitulo');
+    const redacaoCorrigir = document.getElementById('redacao-corrigir');
+    if (redacaoCorrigir) redacaoCorrigir.textContent = t('redacao_corrigir');
 
     // Vestibulinho
-    document.getElementById('vest-titulo').textContent = t('vest_titulo');
-    document.getElementById('vest-subtitulo').textContent = t('vest_subtitulo');
-    document.getElementById('vest-gerar').textContent = t('vest_gerar');
+    const vestTitulo = document.getElementById('vest-titulo');
+    if (vestTitulo) vestTitulo.textContent = t('vest_titulo');
+    const vestSubtitulo = document.getElementById('vest-subtitulo');
+    if (vestSubtitulo) vestSubtitulo.textContent = t('vest_subtitulo');
+    const vestGerar = document.getElementById('vest-gerar');
+    if (vestGerar) vestGerar.textContent = t('vest_gerar');
 
     // Grupo
-    document.getElementById('grupo-titulo').textContent = t('grupo_titulo');
-    document.getElementById('grupo-subtitulo').textContent = t('grupo_subtitulo');
-    document.getElementById('grupo-criar-titulo').textContent = t('grupo_criar_titulo');
-    document.getElementById('grupo-criar-btn').textContent = t('grupo_criar_btn');
-    document.getElementById('grupo-entrar-titulo').textContent = t('grupo_entrar_titulo');
-    document.getElementById('grupo-entrar-btn').textContent = t('grupo_entrar_btn');
-    document.getElementById('grupo-sair-btn').textContent = t('grupo_sair_btn');
-    document.getElementById('grupo-membros-titulo').textContent = t('grupo_membros_titulo');
-    document.getElementById('grupo-ranking-titulo').textContent = t('grupo_ranking_titulo');
-    document.getElementById('grupo-ranking-semanal').textContent = t('grupo_ranking_semanal');
-    document.getElementById('grupo-ranking-mensal').textContent = t('grupo_ranking_mensal');
-    document.getElementById('grupo-chat-titulo').textContent = t('grupo_chat_titulo');
+    const grupoTitulo = document.getElementById('grupo-titulo');
+    if (grupoTitulo) grupoTitulo.textContent = t('grupo_titulo');
+    const grupoSubtitulo = document.getElementById('grupo-subtitulo');
+    if (grupoSubtitulo) grupoSubtitulo.textContent = t('grupo_subtitulo');
+    const grupoCriarTitulo = document.getElementById('grupo-criar-titulo');
+    if (grupoCriarTitulo) grupoCriarTitulo.textContent = t('grupo_criar_titulo');
+    const grupoCriarBtn = document.getElementById('grupo-criar-btn');
+    if (grupoCriarBtn) grupoCriarBtn.textContent = t('grupo_criar_btn');
+    const grupoEntrarTitulo = document.getElementById('grupo-entrar-titulo');
+    if (grupoEntrarTitulo) grupoEntrarTitulo.textContent = t('grupo_entrar_titulo');
+    const grupoEntrarBtn = document.getElementById('grupo-entrar-btn');
+    if (grupoEntrarBtn) grupoEntrarBtn.textContent = t('grupo_entrar_btn');
+    const grupoSairBtn = document.getElementById('grupo-sair-btn');
+    if (grupoSairBtn) grupoSairBtn.textContent = t('grupo_sair_btn');
+    const grupoMembrosTitulo = document.getElementById('grupo-membros-titulo');
+    if (grupoMembrosTitulo) grupoMembrosTitulo.textContent = t('grupo_membros_titulo');
+    const grupoRankingTitulo = document.getElementById('grupo-ranking-titulo');
+    if (grupoRankingTitulo) grupoRankingTitulo.textContent = t('grupo_ranking_titulo');
+    const grupoRankingSemanal = document.getElementById('grupo-ranking-semanal');
+    if (grupoRankingSemanal) grupoRankingSemanal.textContent = t('grupo_ranking_semanal');
+    const grupoRankingMensal = document.getElementById('grupo-ranking-mensal');
+    if (grupoRankingMensal) grupoRankingMensal.textContent = t('grupo_ranking_mensal');
+    const grupoChatTitulo = document.getElementById('grupo-chat-titulo');
+    if (grupoChatTitulo) grupoChatTitulo.textContent = t('grupo_chat_titulo');
 
     // Aulas
-    document.getElementById('aulas-titulo').textContent = t('aulas_titulo');
-    document.getElementById('aulas-subtitulo').textContent = t('aulas_subtitulo');
-    document.getElementById('aulas-add-titulo').textContent = t('aulas_add_titulo');
-    document.getElementById('aulas-add-btn').textContent = t('aulas_add_btn');
+    const aulasTitulo = document.getElementById('aulas-titulo');
+    if (aulasTitulo) aulasTitulo.textContent = t('aulas_titulo');
+    const aulasSubtitulo = document.getElementById('aulas-subtitulo');
+    if (aulasSubtitulo) aulasSubtitulo.textContent = t('aulas_subtitulo');
+    const aulasAddTitulo = document.getElementById('aulas-add-titulo');
+    if (aulasAddTitulo) aulasAddTitulo.textContent = t('aulas_add_titulo');
+    const aulasAddBtn = document.getElementById('aulas-add-btn');
+    if (aulasAddBtn) aulasAddBtn.textContent = t('aulas_add_btn');
 
     // Relatórios
-    document.getElementById('rel-titulo').textContent = t('rel_titulo');
-    document.getElementById('rel-subtitulo').textContent = t('rel_subtitulo');
-    document.getElementById('rel-total-label').textContent = t('rel_total');
-    document.getElementById('rel-sessoes-label').textContent = t('rel_sessoes');
-    document.getElementById('rel-flashcards-label').textContent = t('rel_flashcards');
-    document.getElementById('rel-racha-label').textContent = t('rel_racha');
+    const relTitulo = document.getElementById('rel-titulo');
+    if (relTitulo) relTitulo.textContent = t('rel_titulo');
+    const relSubtitulo = document.getElementById('rel-subtitulo');
+    if (relSubtitulo) relSubtitulo.textContent = t('rel_subtitulo');
+    const relTotalLabel = document.getElementById('rel-total-label');
+    if (relTotalLabel) relTotalLabel.textContent = t('rel_total');
+    const relSessoesLabel = document.getElementById('rel-sessoes-label');
+    if (relSessoesLabel) relSessoesLabel.textContent = t('rel_sessoes');
+    const relFlashcardsLabel = document.getElementById('rel-flashcards-label');
+    if (relFlashcardsLabel) relFlashcardsLabel.textContent = t('rel_flashcards');
+    const relRachaLabel = document.getElementById('rel-racha-label');
+    if (relRachaLabel) relRachaLabel.textContent = t('rel_racha');
 
     // Configurações
-    document.getElementById('config-titulo').textContent = t('config_titulo');
-    document.getElementById('config-subtitulo').textContent = t('config_subtitulo');
-    document.getElementById('config-idioma-titulo').textContent = t('config_idioma_titulo');
-    document.getElementById('config-idioma-desc').textContent = t('config_idioma_desc');
-    document.getElementById('config-conta-titulo').textContent = t('config_conta_titulo');
-    document.getElementById('config-conta-desc').textContent = t('config_conta_desc');
-    document.getElementById('config-editar-nome').textContent = t('config_editar_nome');
-    document.getElementById('config-alterar-senha').textContent = t('config_alterar_senha');
+    const configTitulo = document.getElementById('config-titulo');
+    if (configTitulo) configTitulo.textContent = t('config_titulo');
+    const configSubtitulo = document.getElementById('config-subtitulo');
+    if (configSubtitulo) configSubtitulo.textContent = t('config_subtitulo');
+    const configIdiomaTitulo = document.getElementById('config-idioma-titulo');
+    if (configIdiomaTitulo) configIdiomaTitulo.textContent = t('config_idioma_titulo');
+    const configIdiomaDesc = document.getElementById('config-idioma-desc');
+    if (configIdiomaDesc) configIdiomaDesc.textContent = t('config_idioma_desc');
+    const configContaTitulo = document.getElementById('config-conta-titulo');
+    if (configContaTitulo) configContaTitulo.textContent = t('config_conta_titulo');
+    const configContaDesc = document.getElementById('config-conta-desc');
+    if (configContaDesc) configContaDesc.textContent = t('config_conta_desc');
+    const configEditarNome = document.getElementById('config-editar-nome');
+    if (configEditarNome) configEditarNome.textContent = t('config_editar_nome');
+    const configAlterarSenha = document.getElementById('config-alterar-senha');
+    if (configAlterarSenha) configAlterarSenha.textContent = t('config_alterar_senha');
 
-    // Idiomas do select
-    document.getElementById('idioma-label').textContent = idiomaAtual.toUpperCase();
+    // Idioma do label do botão
+    const idiomaLabel = document.getElementById('idioma-label');
+    if (idiomaLabel) idiomaLabel.textContent = idiomaAtual.toUpperCase();
 }
 
 function atualizarPlaceholderChat() {
     const input = document.getElementById('chat-input');
+    if (!input) return;
     if (modoPaiAtual === 'estudo') {
         input.placeholder = t('chat_placeholder_estudo');
     } else {
@@ -419,6 +461,7 @@ const labelsModo = {
 
 function atualizarModos() {
     const select = document.getElementById('modo-select');
+    if (!select) return;
     const opcoes = opcoesModo[modoPaiAtual];
     const labels = labelsModo[modoPaiAtual];
     
@@ -434,16 +477,20 @@ function atualizarModos() {
     atualizarPlaceholderChat();
 }
 
-// Evento do toggle
+// Evento do toggle (se existir)
 document.addEventListener('DOMContentLoaded', function() {
     const toggle = document.getElementById('toggle-modo-pai');
-    toggle.addEventListener('change', function() {
-        modoPaiAtual = this.checked ? 'cotidiano' : 'estudo';
-        atualizarModos();
-        // Atualizar labels do toggle
-        document.getElementById('modo-estudo-label').style.color = this.checked ? 'var(--text-muted)' : 'var(--cor-primaria)';
-        document.getElementById('modo-cotidiano-label').style.color = this.checked ? 'var(--cor-primaria)' : 'var(--text-muted)';
-    });
+    if (toggle) {
+        toggle.addEventListener('change', function() {
+            modoPaiAtual = this.checked ? 'cotidiano' : 'estudo';
+            atualizarModos();
+            // Atualizar cores dos labels
+            const estudoLabel = document.getElementById('modo-estudo-label');
+            const cotidianoLabel = document.getElementById('modo-cotidiano-label');
+            if (estudoLabel) estudoLabel.style.color = this.checked ? 'var(--text-muted)' : 'var(--cor-primaria)';
+            if (cotidianoLabel) cotidianoLabel.style.color = this.checked ? 'var(--cor-primaria)' : 'var(--text-muted)';
+        });
+    }
 });
 
 // ============================================================
@@ -479,7 +526,7 @@ async function entrarNoApp(usuario) {
 }
 
 async function garantirUsuario(usuario) {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('usuarios')
         .upsert({
             id: usuario.id,
@@ -491,7 +538,7 @@ async function garantirUsuario(usuario) {
 }
 
 async function carregarPreferencias() {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('usuarios')
         .select('idioma')
         .eq('id', usuarioAtual.id)
@@ -499,63 +546,77 @@ async function carregarPreferencias() {
     
     if (data?.idioma) {
         idiomaAtual = data.idioma;
-        document.getElementById('config-idioma').value = idiomaAtual;
-        document.getElementById('idioma-label').textContent = idiomaAtual.toUpperCase();
+        const configIdioma = document.getElementById('config-idioma');
+        if (configIdioma) configIdioma.value = idiomaAtual;
         aplicarTraducao();
     }
 }
 
+// ============================================================
+// EVENTOS DE LOGIN
+// ============================================================
 // Login com email
-document.getElementById('login-btn').addEventListener('click', async function() {
-    const email = document.getElementById('login-email').value;
-    const senha = document.getElementById('login-senha').value;
-    if (!email || !senha) {
-        document.getElementById('login-mensagem').textContent = 'Preencha e-mail e senha.';
-        return;
+document.addEventListener('DOMContentLoaded', function() {
+    const loginBtn = document.getElementById('login-btn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', async function() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+            if (!email || !senha) {
+                document.getElementById('login-mensagem').textContent = 'Preencha e-mail e senha.';
+                return;
+            }
+            this.disabled = true;
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: senha });
+            this.disabled = false;
+            if (error) {
+                document.getElementById('login-mensagem').textContent = error.message;
+                return;
+            }
+            if (data.user) {
+                await entrarNoApp(data.user);
+            }
+        });
     }
-    this.disabled = true;
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password: senha });
-    this.disabled = false;
-    if (error) {
-        document.getElementById('login-mensagem').textContent = error.message;
-        return;
-    }
-    if (data.user) {
-        await entrarNoApp(data.user);
-    }
-});
 
-// Login com Google
-document.getElementById('login-google-btn').addEventListener('click', async function() {
-    this.disabled = true;
-    const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo: window.location.origin }
+    // Login com Google
+    const loginGoogleBtn = document.getElementById('login-google-btn');
+    if (loginGoogleBtn) {
+        loginGoogleBtn.addEventListener('click', async function() {
+            this.disabled = true;
+            const { data, error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: window.location.origin }
+            });
+            this.disabled = false;
+            if (error) {
+                document.getElementById('login-mensagem').textContent = error.message;
+            }
+        });
+    }
+
+    // Verificar sessão ao carregar
+    supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
+        if (session?.user) {
+            await entrarNoApp(session.user);
+        }
     });
-    this.disabled = false;
-    if (error) {
-        document.getElementById('login-mensagem').textContent = error.message;
-    }
-});
 
-// Verificar sessão ao carregar
-supabase.auth.getSession().then(async ({ data: { session } }) => {
-    if (session?.user) {
-        await entrarNoApp(session.user);
+    // Sair
+    const btnSair = document.getElementById('btn-sair');
+    if (btnSair) {
+        btnSair.addEventListener('click', async function() {
+            await supabaseClient.auth.signOut();
+            location.reload();
+        });
     }
-});
-
-// Sair
-document.getElementById('btn-sair').addEventListener('click', async function() {
-    await supabase.auth.signOut();
-    location.reload();
 });
 
 // ============================================================
 // CONVERSAS
 // ============================================================
 async function carregarConversas() {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('conversas')
         .select('*')
         .eq('usuario_id', usuarioAtual.id)
@@ -572,6 +633,7 @@ async function carregarConversas() {
 
 function renderizarConversas() {
     const container = document.getElementById('lista-conversas');
+    if (!container) return;
     container.innerHTML = '';
     
     todasConversas.forEach(conv => {
@@ -601,20 +663,21 @@ async function alternarConversa(id) {
     conversaAtualId = id;
     await carregarMensagens(id);
     destacarConversa(id);
-    // Atualizar tópicos
     await carregarTopicos(id);
 }
 
 async function carregarMensagens(conversaId) {
     const container = document.getElementById('chat-mensagens');
+    if (!container) return;
     
     // Se já estiver em cache, usar
     if (mensagensCache[conversaId]) {
         container.innerHTML = mensagensCache[conversaId];
+        container.scrollTop = container.scrollHeight;
         return;
     }
     
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('mensagens')
         .select('*')
         .eq('conversa_id', conversaId)
@@ -652,7 +715,7 @@ async function carregarMensagens(conversaId) {
 }
 
 async function criarNovaConversa() {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('conversas')
         .insert({
             usuario_id: usuarioAtual.id,
@@ -676,7 +739,7 @@ async function criarNovaConversa() {
 }
 
 async function deletarConversa(id) {
-    const { error } = await supabase
+    const { error } = await supabaseClient
         .from('conversas')
         .delete()
         .eq('id', id)
@@ -705,7 +768,8 @@ async function deletarConversa(id) {
 // ============================================================
 async function carregarTopicos(conversaId) {
     const container = document.getElementById('lista-topicos');
-    const { data, error } = await supabase
+    if (!container) return;
+    const { data, error } = await supabaseClient
         .from('mensagens')
         .select('content')
         .eq('conversa_id', conversaId)
@@ -731,25 +795,38 @@ async function carregarTopicos(conversaId) {
 // ============================================================
 // ENVIAR MENSAGEM
 // ============================================================
-document.getElementById('btn-chat-enviar').addEventListener('click', enviarMensagem);
-document.getElementById('chat-input').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        enviarMensagem();
+document.addEventListener('DOMContentLoaded', function() {
+    const btnEnviar = document.getElementById('btn-chat-enviar');
+    const inputChat = document.getElementById('chat-input');
+    
+    if (btnEnviar) {
+        btnEnviar.addEventListener('click', enviarMensagem);
+    }
+    if (inputChat) {
+        inputChat.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                enviarMensagem();
+            }
+        });
     }
 });
 
 async function enviarMensagem() {
     const input = document.getElementById('chat-input');
+    if (!input) return;
     const texto = input.value.trim();
     if (!texto || !conversaAtualId) return;
     input.value = '';
     
-    // Adicionar mensagem do usuário
     const container = document.getElementById('chat-mensagens');
+    if (!container) return;
+    
+    // Remover saudação se existir
     const saudacao = container.querySelector('.saudacao-container');
     if (saudacao) saudacao.remove();
     
+    // Adicionar mensagem do usuário
     const msgUser = document.createElement('div');
     msgUser.className = 'mensagem usuario';
     msgUser.textContent = texto;
@@ -757,19 +834,20 @@ async function enviarMensagem() {
     container.scrollTop = container.scrollHeight;
     
     // Salvar no Supabase
-    await supabase.from('mensagens').insert({
+    await supabaseClient.from('mensagens').insert({
         conversa_id: conversaAtualId,
         role: 'user',
         content: texto
     });
     
     // Atualizar título da conversa se for a primeira
-    if (todasConversas.find(c => c.id === conversaAtualId)?.titulo === 'Nova conversa') {
+    const conv = todasConversas.find(c => c.id === conversaAtualId);
+    if (conv && conv.titulo === 'Nova conversa') {
         const titulo = texto.substring(0, 30) + (texto.length > 30 ? '...' : '');
-        await supabase.from('conversas')
+        await supabaseClient.from('conversas')
             .update({ titulo })
             .eq('id', conversaAtualId);
-        todasConversas.find(c => c.id === conversaAtualId).titulo = titulo;
+        conv.titulo = titulo;
         renderizarConversas();
     }
     
@@ -782,6 +860,7 @@ async function enviarMensagem() {
 
 async function chamarIA(pergunta) {
     const container = document.getElementById('chat-mensagens');
+    if (!container) return;
     
     // Indicador de digitação
     const indicator = document.createElement('div');
@@ -796,10 +875,10 @@ async function chamarIA(pergunta) {
     container.scrollTop = container.scrollHeight;
     
     try {
-        const modo = document.getElementById('modo-select').value;
+        const modoSelect = document.getElementById('modo-select');
+        const modo = modoSelect ? modoSelect.value : 'smart';
         const modoPai = modoPaiAtual;
         
-        // Determinar prompt baseado no modo pai
         let promptBase = '';
         if (modoPai === 'estudo') {
             promptBase = 'Você é o SiriusLearn no modo ESTUDO. Seja didático, aprofundado e use exemplos teóricos. Responda com clareza e organização.';
@@ -807,7 +886,6 @@ async function chamarIA(pergunta) {
             promptBase = 'Você é o SiriusLearn no modo COTIDIANO. Seja prático, direto e use exemplos da vida real. Foque em soluções acionáveis.';
         }
         
-        // Adicionar específico do submodo
         const submodoMap = {
             smart: 'Responda de forma inteligente e equilibrada.',
             deeper: 'Pense profundamente, mostre raciocínio passo a passo.',
@@ -821,14 +899,17 @@ async function chamarIA(pergunta) {
         
         const promptFinal = `${promptBase} ${submodoMap[modo] || ''} Responda em ${idiomaAtual === 'pt' ? 'português' : idiomaAtual === 'en' ? 'inglês' : 'espanhol'}.`;
         
-        // Chamar API
+        // Obter histórico
+        const historico = await getHistoricoConversa(conversaAtualId);
+        
+        // Chamar API (assumindo que a rota /api/groq existe)
         const response = await fetch('/api/groq', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 messages: [
                     { role: 'system', content: promptFinal },
-                    ...(await getHistoricoConversa(conversaAtualId))
+                    ...historico
                 ],
                 model: 'openai/gpt-oss-120b',
                 stream: true
@@ -874,7 +955,7 @@ async function chamarIA(pergunta) {
         }
         
         // Salvar resposta no Supabase
-        await supabase.from('mensagens').insert({
+        await supabaseClient.from('mensagens').insert({
             conversa_id: conversaAtualId,
             role: 'assistant',
             content: respostaCompleta
@@ -894,7 +975,7 @@ async function chamarIA(pergunta) {
 }
 
 async function getHistoricoConversa(conversaId) {
-    const { data } = await supabase
+    const { data } = await supabaseClient
         .from('mensagens')
         .select('role, content')
         .eq('conversa_id', conversaId)
@@ -904,7 +985,6 @@ async function getHistoricoConversa(conversaId) {
 }
 
 function formatarResposta(texto) {
-    // Formatação básica (markdown simplificado)
     return texto
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
@@ -916,72 +996,97 @@ function formatarResposta(texto) {
 // ============================================================
 // CONFIGURAÇÕES
 // ============================================================
-document.getElementById('config-idioma').addEventListener('change', async function() {
-    idiomaAtual = this.value;
-    document.getElementById('idioma-label').textContent = idiomaAtual.toUpperCase();
-    await supabase.from('usuarios')
-        .update({ idioma: idiomaAtual })
-        .eq('id', usuarioAtual.id);
-    aplicarTraducao();
-    // Recarregar mensagens para traduzir saudação
-    if (conversaAtualId) {
-        mensagensCache[conversaAtualId] = null;
-        await carregarMensagens(conversaAtualId);
+document.addEventListener('DOMContentLoaded', function() {
+    const configIdioma = document.getElementById('config-idioma');
+    if (configIdioma) {
+        configIdioma.addEventListener('change', async function() {
+            idiomaAtual = this.value;
+            await supabaseClient.from('usuarios')
+                .update({ idioma: idiomaAtual })
+                .eq('id', usuarioAtual.id);
+            aplicarTraducao();
+            // Recarregar mensagens para traduzir saudação
+            if (conversaAtualId) {
+                mensagensCache[conversaAtualId] = null;
+                await carregarMensagens(conversaAtualId);
+            }
+        });
     }
-});
 
-document.getElementById('btn-editar-nome').addEventListener('click', async function() {
-    const novoNome = prompt('Digite seu novo nome:');
-    if (!novoNome) return;
-    await supabase.from('usuarios')
-        .update({ nome_exibicao: novoNome })
-        .eq('id', usuarioAtual.id);
-    document.getElementById('saudacao-topo').textContent = novoNome;
-    document.getElementById('drawer-usuario').textContent = novoNome;
-});
+    const btnEditarNome = document.getElementById('btn-editar-nome');
+    if (btnEditarNome) {
+        btnEditarNome.addEventListener('click', async function() {
+            const novoNome = prompt('Digite seu novo nome:');
+            if (!novoNome) return;
+            await supabaseClient.from('usuarios')
+                .update({ nome_exibicao: novoNome })
+                .eq('id', usuarioAtual.id);
+            document.getElementById('saudacao-topo').textContent = novoNome;
+            document.getElementById('drawer-usuario').textContent = novoNome;
+        });
+    }
 
-document.getElementById('btn-alterar-senha').addEventListener('click', async function() {
-    const email = prompt('Digite seu e-mail para redefinir a senha:');
-    if (!email) return;
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
-    if (error) {
-        alert('Erro: ' + error.message);
-    } else {
-        alert('E-mail de redefinição enviado!');
+    const btnAlterarSenha = document.getElementById('btn-alterar-senha');
+    if (btnAlterarSenha) {
+        btnAlterarSenha.addEventListener('click', async function() {
+            const email = prompt('Digite seu e-mail para redefinir a senha:');
+            if (!email) return;
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+            if (error) {
+                alert('Erro: ' + error.message);
+            } else {
+                alert('E-mail de redefinição enviado!');
+            }
+        });
     }
 });
 
 // ============================================================
 // NAVEGAÇÃO DO DRAWER
 // ============================================================
-document.getElementById('btn-menu-toggle').addEventListener('click', () => {
-    document.getElementById('drawer').classList.add('open');
-    document.getElementById('drawer-overlay').classList.add('show');
-});
+document.addEventListener('DOMContentLoaded', function() {
+    const btnMenuToggle = document.getElementById('btn-menu-toggle');
+    const btnCloseDrawer = document.getElementById('btn-close-drawer');
+    const drawerOverlay = document.getElementById('drawer-overlay');
+    const drawer = document.getElementById('drawer');
 
-document.getElementById('btn-close-drawer').addEventListener('click', fecharDrawer);
-document.getElementById('drawer-overlay').addEventListener('click', fecharDrawer);
+    function fecharDrawer() {
+        if (drawer) drawer.classList.remove('open');
+        if (drawerOverlay) drawerOverlay.classList.remove('show');
+    }
 
-function fecharDrawer() {
-    document.getElementById('drawer').classList.remove('open');
-    document.getElementById('drawer-overlay').classList.remove('show');
-}
+    if (btnMenuToggle) {
+        btnMenuToggle.addEventListener('click', () => {
+            if (drawer) drawer.classList.add('open');
+            if (drawerOverlay) drawerOverlay.classList.add('show');
+        });
+    }
+    if (btnCloseDrawer) {
+        btnCloseDrawer.addEventListener('click', fecharDrawer);
+    }
+    if (drawerOverlay) {
+        drawerOverlay.addEventListener('click', fecharDrawer);
+    }
 
-// Botões do drawer
-document.querySelectorAll('.drawer-item').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const tab = this.dataset.tab;
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.getElementById(`tab-${tab}`).classList.add('active');
-        document.querySelectorAll('.drawer-item').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        fecharDrawer();
+    // Botões do drawer
+    document.querySelectorAll('.drawer-item').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tab = this.dataset.tab;
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            const target = document.getElementById(`tab-${tab}`);
+            if (target) target.classList.add('active');
+            document.querySelectorAll('.drawer-item').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            fecharDrawer();
+        });
     });
-});
 
-// Botões nova conversa
-document.getElementById('btn-nova-conversa').addEventListener('click', criarNovaConversa);
-document.getElementById('btn-nova-conversa-drawer').addEventListener('click', criarNovaConversa);
+    // Botões nova conversa
+    const btnNovaConv = document.getElementById('btn-nova-conversa');
+    const btnNovaConvDrawer = document.getElementById('btn-nova-conversa-drawer');
+    if (btnNovaConv) btnNovaConv.addEventListener('click', criarNovaConversa);
+    if (btnNovaConvDrawer) btnNovaConvDrawer.addEventListener('click', criarNovaConversa);
+});
 
 // ============================================================
 // TIMER DE ESTUDO
@@ -990,33 +1095,56 @@ let timerInterval = null;
 let segundos = 0;
 let estudando = false;
 
-document.getElementById('btn-iniciar').addEventListener('click', function() {
-    if (estudando) return;
-    estudando = true;
-    segundos = 0;
-    timerInterval = setInterval(() => {
-        segundos++;
-        const mins = String(Math.floor(segundos / 60)).padStart(2, '0');
-        const secs = String(segundos % 60).padStart(2, '0');
-        document.getElementById('timer').textContent = `${mins}:${secs}`;
-        // Progresso (máx 1h)
-        const progress = Math.min((segundos / 3600) * 100, 100);
-        document.getElementById('timer-progress').style.width = `${progress}%`;
-    }, 1000);
-    this.disabled = true;
-    document.getElementById('btn-finalizar').disabled = false;
-});
+document.addEventListener('DOMContentLoaded', function() {
+    const btnIniciar = document.getElementById('btn-iniciar');
+    const btnFinalizar = document.getElementById('btn-finalizar');
+    const timerDisplay = document.getElementById('timer');
+    const timerProgress = document.getElementById('timer-progress');
+    const posEstudoArea = document.getElementById('pos-estudo-area');
+    const descricaoEstudo = document.getElementById('descricao-estudo');
+    const btnGerarPos = document.getElementById('btn-gerar-pos');
+    const resultadoPos = document.getElementById('resultado-pos');
 
-document.getElementById('btn-finalizar').addEventListener('click', function() {
-    if (!estudando) return;
-    estudando = false;
-    clearInterval(timerInterval);
-    this.disabled = true;
-    document.getElementById('btn-iniciar').disabled = false;
-    document.getElementById('pos-estudo-area').style.display = 'block';
+    if (btnIniciar) {
+        btnIniciar.addEventListener('click', function() {
+            if (estudando) return;
+            estudando = true;
+            segundos = 0;
+            timerInterval = setInterval(() => {
+                segundos++;
+                const mins = String(Math.floor(segundos / 60)).padStart(2, '0');
+                const secs = String(segundos % 60).padStart(2, '0');
+                if (timerDisplay) timerDisplay.textContent = `${mins}:${secs}`;
+                const progress = Math.min((segundos / 3600) * 100, 100);
+                if (timerProgress) timerProgress.style.width = `${progress}%`;
+            }, 1000);
+            this.disabled = true;
+            if (btnFinalizar) btnFinalizar.disabled = false;
+        });
+    }
+
+    if (btnFinalizar) {
+        btnFinalizar.addEventListener('click', function() {
+            if (!estudando) return;
+            estudando = false;
+            clearInterval(timerInterval);
+            this.disabled = true;
+            if (btnIniciar) btnIniciar.disabled = false;
+            if (posEstudoArea) posEstudoArea.style.display = 'block';
+        });
+    }
+
+    if (btnGerarPos) {
+        btnGerarPos.addEventListener('click', function() {
+            // Lógica para gerar flashcards e quiz (placeholder)
+            if (resultadoPos) {
+                resultadoPos.innerHTML = '<p>✅ Flashcards e quiz gerados com sucesso (funcionalidade em desenvolvimento).</p>';
+            }
+        });
+    }
 });
 
 // ============================================================
-// INICIALIZAÇÃO
+// INICIALIZAÇÃO FINAL
 // ============================================================
-console.log('🚀 SiriusLearn iniciado!');
+console.log('🚀 SiriusLearn iniciado com sucesso!');
