@@ -15,16 +15,16 @@
         <div class="login-container">
             <div class="login-logo"><i class="fas fa-star"></i></div>
             <h1>Sirius<span>Learn</span></h1>
-            <p class="login-subtitle">Sua IA de estudos</p>
+            <p class="login-subtitle" id="login-subtitle">Sua IA de estudos</p>
             <div class="login-card">
                 <input type="email" id="login-email" placeholder="Seu e-mail" />
                 <input type="password" id="login-senha" placeholder="Sua senha" />
-                <button id="login-btn" class="btn-primary"><i class="fas fa-rocket"></i> Entrar</button>
+                <button id="login-btn" class="btn-primary"><i class="fas fa-rocket"></i> <span id="login-btn-text">Entrar</span></button>
                 <div class="login-divider">ou</div>
-                <button id="login-google-btn" class="btn-google"><i class="fab fa-google"></i> Entrar com Google</button>
+                <button id="login-google-btn" class="btn-google"><i class="fab fa-google"></i> <span id="login-google-text">Entrar com Google</span></button>
                 <div class="login-links">
-                    <a href="#" id="mostrar-cadastro"><i class="fas fa-user-plus"></i> Criar conta</a>
-                    <a href="#" id="mostrar-recuperar"><i class="fas fa-key"></i> Esqueci a senha</a>
+                    <a href="#" id="mostrar-cadastro"><i class="fas fa-user-plus"></i> <span id="link-cadastro">Criar conta</span></a>
+                    <a href="#" id="mostrar-recuperar"><i class="fas fa-key"></i> <span id="link-recuperar">Esqueci a senha</span></a>
                 </div>
                 <p class="login-hint" id="login-mensagem"></p>
             </div>
@@ -39,10 +39,10 @@
                 <div class="logo-small"><i class="fas fa-star"></i> Sirius<span>Learn</span></div>
             </div>
             <div class="top-bar-center">
-                <span class="user-greeting"><strong id="saudacao-topo">Usuário</strong> <i class="fas fa-wave-square"></i></span>
+                <span class="user-greeting"><strong id="saudacao-topo">Usuário</strong></span>
             </div>
             <div class="top-bar-right">
-                <button id="btn-nova-conversa" class="btn-new-chat"><i class="fas fa-plus"></i> Nova</button>
+                <button id="btn-nova-conversa" class="btn-new-chat"><i class="fas fa-plus"></i> <span id="btn-nova-text">Nova</span></button>
                 <button id="btn-sair" class="btn-sair"><i class="fas fa-sign-out-alt"></i></button>
             </div>
         </header>
@@ -54,27 +54,27 @@
                     <button id="btn-close-drawer" class="btn-close-drawer"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="drawer-conversas">
-                    <h4><i class="fas fa-comment-dots"></i> Conversas</h4>
+                    <h4><i class="fas fa-comment-dots"></i> <span id="drawer-conversas-titulo">Conversas</span></h4>
                     <div id="lista-conversas"></div>
-                    <button id="btn-nova-conversa-drawer" class="btn-new-conversa"><i class="fas fa-plus"></i> Nova conversa</button>
+                    <button id="btn-nova-conversa-drawer" class="btn-new-conversa"><i class="fas fa-plus"></i> <span id="drawer-nova-conv">Nova conversa</span></button>
                 </div>
                 <hr />
                 <div class="drawer-topicos">
-                    <h4><i class="fas fa-list-ul"></i> Tópicos da conversa</h4>
+                    <h4><i class="fas fa-list-ul"></i> <span id="drawer-topicos-titulo">Tópicos da conversa</span></h4>
                     <div id="lista-topicos"></div>
                 </div>
                 <hr />
                 <div class="drawer-ferramentas">
-                    <h4><i class="fas fa-tools"></i> Ferramentas</h4>
-                    <button class="drawer-item active" data-tab="chat"><i class="fas fa-comment"></i> Chat</button>
-                    <button class="drawer-item" data-tab="estudo"><i class="fas fa-clock"></i> Estudo</button>
-                    <button class="drawer-item" data-tab="flashcards"><i class="fas fa-cards"></i> Flashcards</button>
-                    <button class="drawer-item" data-tab="redacao"><i class="fas fa-pen-fancy"></i> Redação</button>
-                    <button class="drawer-item" data-tab="vestibulinho"><i class="fas fa-chart-bar"></i> Vestibulinho</button>
-                    <button class="drawer-item" data-tab="grupo"><i class="fas fa-users"></i> Grupo</button>
-                    <button class="drawer-item" data-tab="aulas"><i class="fas fa-video"></i> Aulas</button>
-                    <button class="drawer-item" data-tab="relatorios"><i class="fas fa-chart-line"></i> Relatórios</button>
-                    <button class="drawer-item" data-tab="configuracoes"><i class="fas fa-cog"></i> Configurações</button>
+                    <h4><i class="fas fa-tools"></i> <span id="drawer-ferramentas-titulo">Ferramentas</span></h4>
+                    <button class="drawer-item active" data-tab="chat"><i class="fas fa-comment"></i> <span>Chat</span></button>
+                    <button class="drawer-item" data-tab="estudo"><i class="fas fa-clock"></i> <span id="drawer-estudo">Estudo</span></button>
+                    <button class="drawer-item" data-tab="flashcards"><i class="fas fa-cards"></i> <span id="drawer-flashcards">Flashcards</span></button>
+                    <button class="drawer-item" data-tab="redacao"><i class="fas fa-pen-fancy"></i> <span id="drawer-redacao">Redação</span></button>
+                    <button class="drawer-item" data-tab="vestibulinho"><i class="fas fa-chart-bar"></i> <span id="drawer-vestibulinho">Vestibulinho</span></button>
+                    <button class="drawer-item" data-tab="grupo"><i class="fas fa-users"></i> <span id="drawer-grupo">Grupo</span></button>
+                    <button class="drawer-item" data-tab="aulas"><i class="fas fa-video"></i> <span id="drawer-aulas">Aulas</span></button>
+                    <button class="drawer-item" data-tab="relatorios"><i class="fas fa-chart-line"></i> <span id="drawer-relatorios">Relatórios</span></button>
+                    <button class="drawer-item" data-tab="configuracoes"><i class="fas fa-cog"></i> <span id="drawer-configuracoes">Configurações</span></button>
                 </div>
                 <div class="drawer-footer">
                     <span><i class="fas fa-user"></i> <span id="drawer-usuario">Usuário</span></span>
@@ -90,19 +90,24 @@
                         <div class="chat-header">
                             <div class="chat-header-left">
                                 <h2><i class="fas fa-star"></i> SiriusLearn</h2>
-                                <span class="chat-status"><i class="fas fa-circle"></i> Online</span>
+                                <span class="chat-status"><i class="fas fa-circle"></i> <span id="chat-status-text">Online</span></span>
                             </div>
                             <div class="chat-header-right">
-                                <!-- TOGGLE MODO ESTUDO / COTIDIANO -->
-                                <div class="modo-toggle-wrapper">
-                                    <span class="modo-label" id="modo-label-esquerda">🎓 Estudo</span>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" id="modo-toggle" />
-                                        <span class="toggle-slider"></span>
+                                <!-- Alternador de modo pai (Estudo/Cotidiano) -->
+                                <div class="modo-pai-toggle">
+                                    <span class="modo-pai-label" id="modo-estudo-label"><i class="fas fa-graduation-cap"></i> Estudo</span>
+                                    <label class="switch">
+                                        <input type="checkbox" id="toggle-modo-pai">
+                                        <span class="slider"></span>
                                     </label>
-                                    <span class="modo-label" id="modo-label-direita">🌍 Cotidiano</span>
+                                    <span class="modo-pai-label" id="modo-cotidiano-label">Cotidiano <i class="fas fa-globe-americas"></i></span>
                                 </div>
-                                <select id="modo-select" class="modo-select" style="display:none;"></select>
+                                <select id="modo-select" class="modo-select">
+                                    <option value="smart">🧠 Smart</option>
+                                    <option value="deeper">🔬 Think Deeper</option>
+                                    <option value="learn">📚 Estude e Aprenda</option>
+                                    <option value="search">🌐 Pesquisar</option>
+                                </select>
                                 <button class="btn-idioma" id="btn-idioma"><i class="fas fa-globe"></i> <span id="idioma-label">PT</span></button>
                             </div>
                         </div>
@@ -110,8 +115,8 @@
                             <div class="saudacao-container" id="saudacao-container">
                                 <div class="saudacao-content">
                                     <div class="saudacao-icon"><i class="fas fa-star"></i></div>
-                                    <h1 class="saudacao-titulo">Olá!</h1>
-                                    <p class="saudacao-subtitulo">Como posso ajudar você hoje?</p>
+                                    <h1 class="saudacao-titulo" id="saudacao-titulo">Olá!</h1>
+                                    <p class="saudacao-subtitulo" id="saudacao-subtitulo">Como posso ajudar você hoje?</p>
                                 </div>
                             </div>
                         </div>
@@ -124,82 +129,82 @@
                 </section>
 
                 <section id="tab-estudo" class="tab-content">
-                    <h1><i class="fas fa-clock"></i> Sessão de Estudo</h1>
-                    <p class="subtitle">Foque, estude e no final a IA gera flashcards e quiz.</p>
+                    <h1><i class="fas fa-clock"></i> <span id="estudo-titulo">Sessão de Estudo</span></h1>
+                    <p class="subtitle" id="estudo-subtitulo">Foque, estude e no final a IA gera flashcards e quiz.</p>
                     <div class="card">
                         <div style="display:flex; gap:10px; margin-bottom:16px;">
-                            <button id="btn-iniciar" class="btn-primary" style="flex:1;"><i class="fas fa-play"></i> Iniciar</button>
-                            <button id="btn-finalizar" class="btn-danger" style="flex:1;"><i class="fas fa-stop"></i> Finalizar</button>
+                            <button id="btn-iniciar" class="btn-primary" style="flex:1;"><i class="fas fa-play"></i> <span id="estudo-iniciar">Iniciar</span></button>
+                            <button id="btn-finalizar" class="btn-danger" style="flex:1;"><i class="fas fa-stop"></i> <span id="estudo-finalizar">Finalizar</span></button>
                         </div>
                         <div class="timer-display" id="timer">00:00</div>
                         <div class="progress-bar"><div class="fill" id="timer-progress" style="width:0%;"></div></div>
                     </div>
                     <div id="pos-estudo-area" style="display:none;" class="card">
-                        <h3><i class="fas fa-brain"></i> O que você estudou?</h3>
+                        <h3><i class="fas fa-brain"></i> <span id="pos-estudo-titulo">O que você estudou?</span></h3>
                         <textarea id="descricao-estudo" placeholder="Descreva o conteúdo estudado..." style="margin-bottom:12px;"></textarea>
-                        <button id="btn-gerar-pos" class="btn-primary"><i class="fas fa-magic"></i> Gerar Flashcards e Quiz</button>
+                        <button id="btn-gerar-pos" class="btn-primary"><i class="fas fa-magic"></i> <span id="pos-gerar">Gerar Flashcards e Quiz</span></button>
                         <div id="resultado-pos" style="margin-top:20px;"></div>
                     </div>
                 </section>
 
                 <section id="tab-flashcards" class="tab-content">
-                    <h1><i class="fas fa-cards"></i> Flashcards</h1>
-                    <p class="subtitle">Revisão espaçada – revise hoje!</p>
+                    <h1><i class="fas fa-cards"></i> <span id="flashcards-titulo">Flashcards</span></h1>
+                    <p class="subtitle" id="flashcards-subtitulo">Revisão espaçada – revise hoje!</p>
                     <div id="flashcards-lista" class="card"></div>
                 </section>
 
                 <section id="tab-redacao" class="tab-content">
-                    <h1><i class="fas fa-pen-fancy"></i> Corretor de Redação</h1>
-                    <p class="subtitle">Cole sua redação e receba correção estilo ENEM.</p>
+                    <h1><i class="fas fa-pen-fancy"></i> <span id="redacao-titulo">Corretor de Redação</span></h1>
+                    <p class="subtitle" id="redacao-subtitulo">Cole sua redação e receba correção estilo ENEM.</p>
                     <div class="card">
                         <textarea id="texto-redacao" style="min-height:200px;" placeholder="Digite ou cole sua redação aqui..."></textarea>
-                        <button id="btn-corrigir-redacao" class="btn-primary" style="margin-top:12px;"><i class="fas fa-check"></i> Corrigir Redação</button>
+                        <button id="btn-corrigir-redacao" class="btn-primary" style="margin-top:12px;"><i class="fas fa-check"></i> <span id="redacao-corrigir">Corrigir Redação</span></button>
                         <div id="resultado-redacao" style="margin-top:20px; white-space:pre-wrap;"></div>
                     </div>
                 </section>
 
                 <section id="tab-vestibulinho" class="tab-content">
-                    <h1><i class="fas fa-chart-bar"></i> Vestibulinho</h1>
-                    <p class="subtitle">20 questões geradas por IA.</p>
-                    <button id="btn-gerar-vest" class="btn-primary" style="margin-bottom:20px;"><i class="fas fa-sync"></i> Gerar Simulado</button>
+                    <h1><i class="fas fa-chart-bar"></i> <span id="vest-titulo">Vestibulinho</span></h1>
+                    <p class="subtitle" id="vest-subtitulo">20 questões geradas por IA.</p>
+                    <button id="btn-gerar-vest" class="btn-primary" style="margin-bottom:20px;"><i class="fas fa-sync"></i> <span id="vest-gerar">Gerar Simulado</span></button>
                     <div id="vestibulinho-container"></div>
                 </section>
 
                 <section id="tab-grupo" class="tab-content">
-                    <h1><i class="fas fa-users"></i> Grupo de Estudos</h1>
-                    <p class="subtitle">Estude com amigos, compartilhe progresso.</p>
+                    <h1><i class="fas fa-users"></i> <span id="grupo-titulo">Grupo de Estudos</span></h1>
+                    <p class="subtitle" id="grupo-subtitulo">Estude com amigos, compartilhe progresso.</p>
                     <div class="card">
-                        <h3><i class="fas fa-plus-circle"></i> Criar Grupo</h3>
+                        <h3><i class="fas fa-plus-circle"></i> <span id="grupo-criar-titulo">Criar Grupo</span></h3>
                         <div class="flex-row">
                             <input type="text" id="grupo-nome" placeholder="Nome do grupo" style="flex:2;">
                             <input type="text" id="grupo-descricao" placeholder="Descrição (opcional)" style="flex:3;">
-                            <button id="btn-criar-grupo" class="btn-primary"><i class="fas fa-users"></i> Criar</button>
+                            <button id="btn-criar-grupo" class="btn-primary"><i class="fas fa-users"></i> <span id="grupo-criar-btn">Criar</span></button>
                         </div>
                     </div>
                     <div class="card">
-                        <h3><i class="fas fa-key"></i> Entrar em Grupo</h3>
+                        <h3><i class="fas fa-key"></i> <span id="grupo-entrar-titulo">Entrar em Grupo</span></h3>
                         <div class="flex-row">
                             <input type="text" id="grupo-convite" placeholder="Código de convite" style="flex:2;">
-                            <button id="btn-entrar-grupo" class="btn-secondary"><i class="fas fa-sign-in-alt"></i> Entrar</button>
+                            <button id="btn-entrar-grupo" class="btn-secondary"><i class="fas fa-sign-in-alt"></i> <span id="grupo-entrar-btn">Entrar</span></button>
                         </div>
                     </div>
                     <div id="meu-grupo-info" class="card" style="display:none;">
                         <h3 id="grupo-nome-exibido"><i class="fas fa-users"></i> Nome do Grupo</h3>
                         <p id="grupo-desc-exibido" style="color:var(--text-secondary);">Descrição</p>
                         <p><strong><i class="fas fa-key"></i> Código:</strong> <span id="grupo-codigo-exibido">XXXXXX</span></p>
-                        <button id="btn-sair-grupo" class="btn-danger" style="margin-top:8px;"><i class="fas fa-sign-out-alt"></i> Sair do Grupo</button>
+                        <button id="btn-sair-grupo" class="btn-danger" style="margin-top:8px;"><i class="fas fa-sign-out-alt"></i> <span id="grupo-sair-btn">Sair do Grupo</span></button>
                         <hr style="border-color:var(--border-color); margin:16px 0;">
-                        <h4><i class="fas fa-list"></i> Membros</h4>
+                        <h4><i class="fas fa-list"></i> <span id="grupo-membros-titulo">Membros</span></h4>
                         <div id="membros-grupo-lista"></div>
                         <hr style="border-color:var(--border-color); margin:16px 0;">
-                        <h4><i class="fas fa-trophy"></i> Ranking</h4>
+                        <h4><i class="fas fa-trophy"></i> <span id="grupo-ranking-titulo">Ranking</span></h4>
                         <div style="display:flex; gap:10px; margin-bottom:8px;">
-                            <button id="btn-ranking-semanal" class="btn-secondary" style="flex:1;">Semanal</button>
-                            <button id="btn-ranking-mensal" class="btn-secondary" style="flex:1;">Mensal</button>
+                            <button id="btn-ranking-semanal" class="btn-secondary" style="flex:1;"><span id="grupo-ranking-semanal">Semanal</span></button>
+                            <button id="btn-ranking-mensal" class="btn-secondary" style="flex:1;"><span id="grupo-ranking-mensal">Mensal</span></button>
                         </div>
                         <div id="ranking-grupo-lista"></div>
                         <hr style="border-color:var(--border-color); margin:16px 0;">
-                        <h4><i class="fas fa-comment"></i> Chat do Grupo</h4>
+                        <h4><i class="fas fa-comment"></i> <span id="grupo-chat-titulo">Chat do Grupo</span></h4>
                         <div id="chat-grupo-mensagens" style="max-height:200px; overflow-y:auto; background:var(--bg-primary); border-radius:12px; padding:12px; margin-bottom:8px;"></div>
                         <div class="flex-row">
                             <input type="text" id="chat-grupo-input" placeholder="Digite uma mensagem..." style="flex:2;">
@@ -209,42 +214,42 @@
                 </section>
 
                 <section id="tab-aulas" class="tab-content">
-                    <h1><i class="fas fa-video"></i> Aulas</h1>
-                    <p class="subtitle">Playlists do YouTube para estudar.</p>
+                    <h1><i class="fas fa-video"></i> <span id="aulas-titulo">Aulas</span></h1>
+                    <p class="subtitle" id="aulas-subtitulo">Playlists do YouTube para estudar.</p>
                     <div class="card" id="admin-aulas" style="display:none;">
-                        <h3><i class="fas fa-plus-circle"></i> Adicionar Aula</h3>
+                        <h3><i class="fas fa-plus-circle"></i> <span id="aulas-add-titulo">Adicionar Aula</span></h3>
                         <div class="flex-row">
                             <input type="text" id="aula-categoria" placeholder="Categoria" style="flex:1;">
                             <input type="text" id="aula-titulo" placeholder="Título" style="flex:2;">
                             <input type="url" id="aula-link" placeholder="URL do YouTube" style="flex:2;">
-                            <button id="btn-add-aula" class="btn-primary"><i class="fas fa-plus"></i> Adicionar</button>
+                            <button id="btn-add-aula" class="btn-primary"><i class="fas fa-plus"></i> <span id="aulas-add-btn">Adicionar</span></button>
                         </div>
                     </div>
                     <div id="aulas-lista" class="card"></div>
                 </section>
 
                 <section id="tab-relatorios" class="tab-content">
-                    <h1><i class="fas fa-chart-line"></i> Relatórios</h1>
-                    <p class="subtitle">Acompanhe sua evolução.</p>
+                    <h1><i class="fas fa-chart-line"></i> <span id="rel-titulo">Relatórios</span></h1>
+                    <p class="subtitle" id="rel-subtitulo">Acompanhe sua evolução.</p>
                     <div class="card">
                         <div class="metric-grid">
-                            <div class="metric"><div class="value" id="rel-total">0</div><div class="label"><i class="fas fa-clock"></i> Minutos totais</div></div>
-                            <div class="metric"><div class="value" id="rel-sessoes">0</div><div class="label"><i class="fas fa-book"></i> Sessões</div></div>
-                            <div class="metric"><div class="value" id="rel-flashcards">0</div><div class="label"><i class="fas fa-cards"></i> Flashcards</div></div>
-                            <div class="metric"><div class="value" id="rel-racha">0</div><div class="label"><i class="fas fa-fire"></i> Dias seguidos</div></div>
+                            <div class="metric"><div class="value" id="rel-total">0</div><div class="label"><i class="fas fa-clock"></i> <span id="rel-total-label">Minutos totais</span></div></div>
+                            <div class="metric"><div class="value" id="rel-sessoes">0</div><div class="label"><i class="fas fa-book"></i> <span id="rel-sessoes-label">Sessões</span></div></div>
+                            <div class="metric"><div class="value" id="rel-flashcards">0</div><div class="label"><i class="fas fa-cards"></i> <span id="rel-flashcards-label">Flashcards</span></div></div>
+                            <div class="metric"><div class="value" id="rel-racha">0</div><div class="label"><i class="fas fa-fire"></i> <span id="rel-racha-label">Dias seguidos</span></div></div>
                         </div>
                     </div>
                 </section>
 
                 <section id="tab-configuracoes" class="tab-content">
-                    <h1><i class="fas fa-cog"></i> Configurações</h1>
-                    <p class="subtitle">Personalize sua experiência no SiriusLearn.</p>
+                    <h1><i class="fas fa-cog"></i> <span id="config-titulo">Configurações</span></h1>
+                    <p class="subtitle" id="config-subtitulo">Personalize sua experiência no SiriusLearn.</p>
                     <div class="config-container">
                         <div class="config-card">
                             <div class="config-icon"><i class="fas fa-globe"></i></div>
                             <div class="config-content">
-                                <h3>Idioma</h3>
-                                <p>Escolha o idioma da interface e das respostas da IA.</p>
+                                <h3 id="config-idioma-titulo">Idioma</h3>
+                                <p id="config-idioma-desc">Escolha o idioma da interface e das respostas da IA.</p>
                                 <select id="config-idioma" class="config-select">
                                     <option value="pt">🇧🇷 Português</option>
                                     <option value="en">🇺🇸 English</option>
@@ -255,11 +260,11 @@
                         <div class="config-card">
                             <div class="config-icon"><i class="fas fa-user"></i></div>
                             <div class="config-content">
-                                <h3>Conta</h3>
-                                <p>Gerencie suas informações pessoais.</p>
+                                <h3 id="config-conta-titulo">Conta</h3>
+                                <p id="config-conta-desc">Gerencie suas informações pessoais.</p>
                                 <div class="config-buttons">
-                                    <button class="btn-secondary" id="btn-editar-nome"><i class="fas fa-pencil-alt"></i> Alterar nome</button>
-                                    <button class="btn-secondary" id="btn-alterar-senha"><i class="fas fa-key"></i> Alterar senha</button>
+                                    <button class="btn-secondary" id="btn-editar-nome"><i class="fas fa-pencil-alt"></i> <span id="config-editar-nome">Alterar nome</span></button>
+                                    <button class="btn-secondary" id="btn-alterar-senha"><i class="fas fa-key"></i> <span id="config-alterar-senha">Alterar senha</span></button>
                                 </div>
                             </div>
                         </div>
