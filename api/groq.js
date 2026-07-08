@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         messages,
-        model: model || 'llama3-70b-8192',
+        model: model || 'qwen/qwen3.6-27b',
         stream: stream || false,
         temperature: 0.7,
         max_tokens: 4096,
