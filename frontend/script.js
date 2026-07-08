@@ -4,7 +4,6 @@
 const SUPABASE_URL = 'https://vpihrpqvzrmixxdrqwbj.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_ucBzmjp0Xbwi7Z-RHsk4Yg_LydKnMMZ';
 
-// Cria cliente com nome único para evitar conflito com a variável global
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ============================================================
@@ -14,7 +13,7 @@ let usuarioAtual = null;
 let conversaAtualId = null;
 let todasConversas = [];
 let mensagensCache = {};
-let modoPaiAtual = 'estudo'; // 'estudo' ou 'cotidiano'
+let modoPaiAtual = 'estudo';
 let idiomaAtual = 'pt';
 let isDigitando = false;
 let streamController = null;
@@ -276,11 +275,9 @@ function aplicarTraducao() {
     const linkRecuperar = document.getElementById('link-recuperar');
     if (linkRecuperar) linkRecuperar.textContent = t('login_recuperar');
 
-    // Top bar
     const btnNovaText = document.getElementById('btn-nova-text');
     if (btnNovaText) btnNovaText.textContent = t('btn_nova');
 
-    // Drawer
     const drawerConversas = document.getElementById('drawer-conversas-titulo');
     if (drawerConversas) drawerConversas.textContent = t('drawer_conversas');
     const drawerNovaConv = document.getElementById('drawer-nova-conv');
@@ -309,7 +306,6 @@ function aplicarTraducao() {
         }
     });
 
-    // Chat
     const chatStatus = document.getElementById('chat-status-text');
     if (chatStatus) chatStatus.textContent = t('chat_status');
     const saudacaoTitulo = document.getElementById('saudacao-titulo');
@@ -318,10 +314,8 @@ function aplicarTraducao() {
     if (saudacaoSubtitulo) saudacaoSubtitulo.textContent = t('saudacao_subtitulo');
     atualizarPlaceholderChat();
 
-    // Modos (submodos) - serão atualizados pelo toggle
     atualizarModos();
 
-    // Estudo
     document.querySelectorAll('[id^="estudo-"]').forEach(el => {
         if (el.id === 'estudo-titulo') el.textContent = t('estudo_titulo');
         else if (el.id === 'estudo-subtitulo') el.textContent = t('estudo_subtitulo');
@@ -331,13 +325,11 @@ function aplicarTraducao() {
         else if (el.id === 'pos-gerar') el.textContent = t('pos_gerar');
     });
 
-    // Flashcards
     const flashcardsTitulo = document.getElementById('flashcards-titulo');
     if (flashcardsTitulo) flashcardsTitulo.textContent = t('flashcards_titulo');
     const flashcardsSubtitulo = document.getElementById('flashcards-subtitulo');
     if (flashcardsSubtitulo) flashcardsSubtitulo.textContent = t('flashcards_subtitulo');
 
-    // Redação
     const redacaoTitulo = document.getElementById('redacao-titulo');
     if (redacaoTitulo) redacaoTitulo.textContent = t('redacao_titulo');
     const redacaoSubtitulo = document.getElementById('redacao-subtitulo');
@@ -345,7 +337,6 @@ function aplicarTraducao() {
     const redacaoCorrigir = document.getElementById('redacao-corrigir');
     if (redacaoCorrigir) redacaoCorrigir.textContent = t('redacao_corrigir');
 
-    // Vestibulinho
     const vestTitulo = document.getElementById('vest-titulo');
     if (vestTitulo) vestTitulo.textContent = t('vest_titulo');
     const vestSubtitulo = document.getElementById('vest-subtitulo');
@@ -353,7 +344,6 @@ function aplicarTraducao() {
     const vestGerar = document.getElementById('vest-gerar');
     if (vestGerar) vestGerar.textContent = t('vest_gerar');
 
-    // Grupo
     const grupoTitulo = document.getElementById('grupo-titulo');
     if (grupoTitulo) grupoTitulo.textContent = t('grupo_titulo');
     const grupoSubtitulo = document.getElementById('grupo-subtitulo');
@@ -379,7 +369,6 @@ function aplicarTraducao() {
     const grupoChatTitulo = document.getElementById('grupo-chat-titulo');
     if (grupoChatTitulo) grupoChatTitulo.textContent = t('grupo_chat_titulo');
 
-    // Aulas
     const aulasTitulo = document.getElementById('aulas-titulo');
     if (aulasTitulo) aulasTitulo.textContent = t('aulas_titulo');
     const aulasSubtitulo = document.getElementById('aulas-subtitulo');
@@ -389,7 +378,6 @@ function aplicarTraducao() {
     const aulasAddBtn = document.getElementById('aulas-add-btn');
     if (aulasAddBtn) aulasAddBtn.textContent = t('aulas_add_btn');
 
-    // Relatórios
     const relTitulo = document.getElementById('rel-titulo');
     if (relTitulo) relTitulo.textContent = t('rel_titulo');
     const relSubtitulo = document.getElementById('rel-subtitulo');
@@ -403,7 +391,6 @@ function aplicarTraducao() {
     const relRachaLabel = document.getElementById('rel-racha-label');
     if (relRachaLabel) relRachaLabel.textContent = t('rel_racha');
 
-    // Configurações
     const configTitulo = document.getElementById('config-titulo');
     if (configTitulo) configTitulo.textContent = t('config_titulo');
     const configSubtitulo = document.getElementById('config-subtitulo');
@@ -421,7 +408,6 @@ function aplicarTraducao() {
     const configAlterarSenha = document.getElementById('config-alterar-senha');
     if (configAlterarSenha) configAlterarSenha.textContent = t('config_alterar_senha');
 
-    // Idioma do label do botão
     const idiomaLabel = document.getElementById('idioma-label');
     if (idiomaLabel) idiomaLabel.textContent = idiomaAtual.toUpperCase();
 }
@@ -437,7 +423,7 @@ function atualizarPlaceholderChat() {
 }
 
 // ============================================================
-// ALTERNADOR DE MODO PAI (ESTUDO / COTIDIANO)
+// ALTERNADOR DE MODO PAI
 // ============================================================
 const opcoesModo = {
     estudo: ['smart', 'deeper', 'learn', 'search'],
@@ -477,14 +463,12 @@ function atualizarModos() {
     atualizarPlaceholderChat();
 }
 
-// Evento do toggle (se existir)
 document.addEventListener('DOMContentLoaded', function() {
     const toggle = document.getElementById('toggle-modo-pai');
     if (toggle) {
         toggle.addEventListener('change', function() {
             modoPaiAtual = this.checked ? 'cotidiano' : 'estudo';
             atualizarModos();
-            // Atualizar cores dos labels
             const estudoLabel = document.getElementById('modo-estudo-label');
             const cotidianoLabel = document.getElementById('modo-cotidiano-label');
             if (estudoLabel) estudoLabel.style.color = this.checked ? 'var(--text-muted)' : 'var(--cor-primaria)';
@@ -501,21 +485,14 @@ async function entrarNoApp(usuario) {
     document.getElementById('tela-login').style.display = 'none';
     document.getElementById('app-principal').style.display = 'block';
     
-    // Atualizar nome
     const nome = usuario.user_metadata?.full_name || usuario.email?.split('@')[0] || 'Usuário';
     document.getElementById('saudacao-topo').textContent = nome;
     document.getElementById('drawer-usuario').textContent = nome;
     
-    // Verificar/inserir na tabela usuarios
     await garantirUsuario(usuario);
-    
-    // Carregar preferências
     await carregarPreferencias();
-    
-    // Carregar conversas
     await carregarConversas();
     
-    // Iniciar nova conversa se não houver
     if (todasConversas.length === 0) {
         await criarNovaConversa();
     } else {
@@ -555,7 +532,6 @@ async function carregarPreferencias() {
 // ============================================================
 // EVENTOS DE LOGIN
 // ============================================================
-// Login com email
 document.addEventListener('DOMContentLoaded', function() {
     const loginBtn = document.getElementById('login-btn');
     if (loginBtn) {
@@ -579,7 +555,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Login com Google
     const loginGoogleBtn = document.getElementById('login-google-btn');
     if (loginGoogleBtn) {
         loginGoogleBtn.addEventListener('click', async function() {
@@ -595,14 +570,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Verificar sessão ao carregar
     supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
         if (session?.user) {
             await entrarNoApp(session.user);
         }
     });
 
-    // Sair
     const btnSair = document.getElementById('btn-sair');
     if (btnSair) {
         btnSair.addEventListener('click', async function() {
@@ -670,7 +643,6 @@ async function carregarMensagens(conversaId) {
     const container = document.getElementById('chat-mensagens');
     if (!container) return;
     
-    // Se já estiver em cache, usar
     if (mensagensCache[conversaId]) {
         container.innerHTML = mensagensCache[conversaId];
         container.scrollTop = container.scrollHeight;
@@ -690,7 +662,6 @@ async function carregarMensagens(conversaId) {
     
     container.innerHTML = '';
     if (!data || data.length === 0) {
-        // Mostrar saudação
         container.innerHTML = `
             <div class="saudacao-container" id="saudacao-container">
                 <div class="saudacao-content">
@@ -704,12 +675,11 @@ async function carregarMensagens(conversaId) {
         data.forEach(msg => {
             const div = document.createElement('div');
             div.className = `mensagem ${msg.role === 'user' ? 'usuario' : 'ia'}`;
-            div.innerHTML = msg.content;
+            div.innerHTML = msg.texto;  // <--- CORRIGIDO: era msg.content
             container.appendChild(div);
         });
     }
     
-    // Salvar cache
     mensagensCache[conversaId] = container.innerHTML;
     container.scrollTop = container.scrollHeight;
 }
@@ -764,29 +734,42 @@ async function deletarConversa(id) {
 }
 
 // ============================================================
-// TÓPICOS DA CONVERSA
+// TÓPICOS DA CONVERSA (CORRIGIDO)
 // ============================================================
 async function carregarTopicos(conversaId) {
     const container = document.getElementById('lista-topicos');
     if (!container) return;
+
+    const id = Number(conversaId);
+    if (isNaN(id)) {
+        container.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:8px;">ID inválido.</div>';
+        return;
+    }
+
     const { data, error } = await supabaseClient
         .from('mensagens')
-        .select('content')
-        .eq('conversa_id', conversaId)
+        .select('texto')  // <--- CORRIGIDO: era 'content'
+        .eq('conversa_id', id)
         .eq('role', 'user')
         .order('created_at', { ascending: false })
         .limit(20);
-    
+
     container.innerHTML = '';
-    if (error || !data || data.length === 0) {
+    if (error) {
+        console.error('Erro ao carregar tópicos:', error);
+        container.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:8px;">Erro ao carregar tópicos.</div>';
+        return;
+    }
+
+    if (!data || data.length === 0) {
         container.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:8px;">Nenhum tópico ainda.</div>';
         return;
     }
-    
+
     data.forEach(msg => {
         const div = document.createElement('div');
         div.className = 'topico-item';
-        const texto = msg.content.substring(0, 50) + (msg.content.length > 50 ? '...' : '');
+        const texto = msg.texto.substring(0, 50) + (msg.texto.length > 50 ? '...' : '');  // <--- CORRIGIDO: era msg.content
         div.textContent = texto;
         container.appendChild(div);
     });
@@ -822,25 +805,21 @@ async function enviarMensagem() {
     const container = document.getElementById('chat-mensagens');
     if (!container) return;
     
-    // Remover saudação se existir
     const saudacao = container.querySelector('.saudacao-container');
     if (saudacao) saudacao.remove();
     
-    // Adicionar mensagem do usuário
     const msgUser = document.createElement('div');
     msgUser.className = 'mensagem usuario';
     msgUser.textContent = texto;
     container.appendChild(msgUser);
     container.scrollTop = container.scrollHeight;
     
-    // Salvar no Supabase
     await supabaseClient.from('mensagens').insert({
         conversa_id: conversaAtualId,
         role: 'user',
-        content: texto
+        texto: texto  // <--- CORRIGIDO: era content: texto
     });
     
-    // Atualizar título da conversa se for a primeira
     const conv = todasConversas.find(c => c.id === conversaAtualId);
     if (conv && conv.titulo === 'Nova conversa') {
         const titulo = texto.substring(0, 30) + (texto.length > 30 ? '...' : '');
@@ -851,10 +830,7 @@ async function enviarMensagem() {
         renderizarConversas();
     }
     
-    // Atualizar tópicos
     await carregarTopicos(conversaAtualId);
-    
-    // Chamar IA
     await chamarIA(texto);
 }
 
@@ -862,7 +838,6 @@ async function chamarIA(pergunta) {
     const container = document.getElementById('chat-mensagens');
     if (!container) return;
     
-    // Indicador de digitação
     const indicator = document.createElement('div');
     indicator.className = 'digitando-indicator';
     indicator.innerHTML = `
@@ -899,10 +874,8 @@ async function chamarIA(pergunta) {
         
         const promptFinal = `${promptBase} ${submodoMap[modo] || ''} Responda em ${idiomaAtual === 'pt' ? 'português' : idiomaAtual === 'en' ? 'inglês' : 'espanhol'}.`;
         
-        // Obter histórico
         const historico = await getHistoricoConversa(conversaAtualId);
         
-        // Chamar API (assumindo que a rota /api/groq existe)
         const response = await fetch('/api/groq', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -918,16 +891,13 @@ async function chamarIA(pergunta) {
         
         if (!response.ok) throw new Error('Erro na API');
         
-        // Remover indicador
         indicator.remove();
         
-        // Criar mensagem da IA
         const msgIA = document.createElement('div');
         msgIA.className = 'mensagem ia';
         container.appendChild(msgIA);
         container.scrollTop = container.scrollHeight;
         
-        // Ler stream
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let respostaCompleta = '';
@@ -954,14 +924,12 @@ async function chamarIA(pergunta) {
             }
         }
         
-        // Salvar resposta no Supabase
         await supabaseClient.from('mensagens').insert({
             conversa_id: conversaAtualId,
             role: 'assistant',
-            content: respostaCompleta
+            texto: respostaCompleta  // <--- CORRIGIDO: era content: respostaCompleta
         });
         
-        // Atualizar cache
         mensagensCache[conversaAtualId] = null;
         
     } catch (error) {
@@ -977,11 +945,11 @@ async function chamarIA(pergunta) {
 async function getHistoricoConversa(conversaId) {
     const { data } = await supabaseClient
         .from('mensagens')
-        .select('role, content')
+        .select('role, texto')  // <--- CORRIGIDO: era 'role, content'
         .eq('conversa_id', conversaId)
         .order('created_at', { ascending: true })
         .limit(10);
-    return data?.map(m => ({ role: m.role, content: m.content })) || [];
+    return data?.map(m => ({ role: m.role, content: m.texto })) || [];
 }
 
 function formatarResposta(texto) {
@@ -1005,7 +973,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 .update({ idioma: idiomaAtual })
                 .eq('id', usuarioAtual.id);
             aplicarTraducao();
-            // Recarregar mensagens para traduzir saudação
             if (conversaAtualId) {
                 mensagensCache[conversaAtualId] = null;
                 await carregarMensagens(conversaAtualId);
@@ -1068,7 +1035,6 @@ document.addEventListener('DOMContentLoaded', function() {
         drawerOverlay.addEventListener('click', fecharDrawer);
     }
 
-    // Botões do drawer
     document.querySelectorAll('.drawer-item').forEach(btn => {
         btn.addEventListener('click', function() {
             const tab = this.dataset.tab;
@@ -1081,7 +1047,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Botões nova conversa
     const btnNovaConv = document.getElementById('btn-nova-conversa');
     const btnNovaConvDrawer = document.getElementById('btn-nova-conversa-drawer');
     if (btnNovaConv) btnNovaConv.addEventListener('click', criarNovaConversa);
@@ -1101,9 +1066,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const timerDisplay = document.getElementById('timer');
     const timerProgress = document.getElementById('timer-progress');
     const posEstudoArea = document.getElementById('pos-estudo-area');
-    const descricaoEstudo = document.getElementById('descricao-estudo');
-    const btnGerarPos = document.getElementById('btn-gerar-pos');
-    const resultadoPos = document.getElementById('resultado-pos');
 
     if (btnIniciar) {
         btnIniciar.addEventListener('click', function() {
@@ -1133,18 +1095,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (posEstudoArea) posEstudoArea.style.display = 'block';
         });
     }
-
-    if (btnGerarPos) {
-        btnGerarPos.addEventListener('click', function() {
-            // Lógica para gerar flashcards e quiz (placeholder)
-            if (resultadoPos) {
-                resultadoPos.innerHTML = '<p>✅ Flashcards e quiz gerados com sucesso (funcionalidade em desenvolvimento).</p>';
-            }
-        });
-    }
 });
 
-// ============================================================
-// INICIALIZAÇÃO FINAL
-// ============================================================
 console.log('🚀 SiriusLearn iniciado com sucesso!');
