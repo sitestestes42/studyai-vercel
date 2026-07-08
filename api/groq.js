@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         messages,
-        model: model || 'openai/gpt-oss-20b',  // <--- FALLBACK CORRIGIDO
+        model: model || 'mixtral-8x7b-32768',
         stream: stream || false,
         temperature: 0.7,
         max_tokens: 4096,
