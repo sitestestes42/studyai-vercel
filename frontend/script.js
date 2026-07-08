@@ -17,7 +17,7 @@ let modoPaiAtual = 'estudo';
 let idiomaAtual = 'pt';
 
 // ============================================================
-// TRADUÇÕES
+// TRADUÇÕES (versão completa)
 // ============================================================
 const traducoes = {
     pt: {
@@ -258,6 +258,7 @@ function t(chave) {
 }
 
 function aplicarTraducao() {
+    // Login
     const loginSubtitle = document.getElementById('login-subtitle');
     if (loginSubtitle) loginSubtitle.textContent = t('login_subtitle');
     const loginBtnText = document.getElementById('login-btn-text');
@@ -269,9 +270,11 @@ function aplicarTraducao() {
     const linkRecuperar = document.getElementById('link-recuperar');
     if (linkRecuperar) linkRecuperar.textContent = t('login_recuperar');
 
+    // Top bar
     const btnNovaText = document.getElementById('btn-nova-text');
     if (btnNovaText) btnNovaText.textContent = t('btn_nova');
 
+    // Drawer
     const drawerConversas = document.getElementById('drawer-conversas-titulo');
     if (drawerConversas) drawerConversas.textContent = t('drawer_conversas');
     const drawerNovaConv = document.getElementById('drawer-nova-conv');
@@ -300,6 +303,7 @@ function aplicarTraducao() {
         }
     });
 
+    // Chat
     const chatStatus = document.getElementById('chat-status-text');
     if (chatStatus) chatStatus.textContent = t('chat_status');
     const saudacaoTitulo = document.getElementById('saudacao-titulo');
@@ -307,9 +311,9 @@ function aplicarTraducao() {
     const saudacaoSubtitulo = document.getElementById('saudacao-subtitulo');
     if (saudacaoSubtitulo) saudacaoSubtitulo.textContent = t('saudacao_subtitulo');
     atualizarPlaceholderChat();
-
     atualizarModos();
 
+    // Estudo
     document.querySelectorAll('[id^="estudo-"]').forEach(el => {
         if (el.id === 'estudo-titulo') el.textContent = t('estudo_titulo');
         else if (el.id === 'estudo-subtitulo') el.textContent = t('estudo_subtitulo');
@@ -319,11 +323,13 @@ function aplicarTraducao() {
         else if (el.id === 'pos-gerar') el.textContent = t('pos_gerar');
     });
 
+    // Flashcards
     const flashcardsTitulo = document.getElementById('flashcards-titulo');
     if (flashcardsTitulo) flashcardsTitulo.textContent = t('flashcards_titulo');
     const flashcardsSubtitulo = document.getElementById('flashcards-subtitulo');
     if (flashcardsSubtitulo) flashcardsSubtitulo.textContent = t('flashcards_subtitulo');
 
+    // Redação
     const redacaoTitulo = document.getElementById('redacao-titulo');
     if (redacaoTitulo) redacaoTitulo.textContent = t('redacao_titulo');
     const redacaoSubtitulo = document.getElementById('redacao-subtitulo');
@@ -331,6 +337,7 @@ function aplicarTraducao() {
     const redacaoCorrigir = document.getElementById('redacao-corrigir');
     if (redacaoCorrigir) redacaoCorrigir.textContent = t('redacao_corrigir');
 
+    // Vestibulinho
     const vestTitulo = document.getElementById('vest-titulo');
     if (vestTitulo) vestTitulo.textContent = t('vest_titulo');
     const vestSubtitulo = document.getElementById('vest-subtitulo');
@@ -338,6 +345,7 @@ function aplicarTraducao() {
     const vestGerar = document.getElementById('vest-gerar');
     if (vestGerar) vestGerar.textContent = t('vest_gerar');
 
+    // Grupo
     const grupoTitulo = document.getElementById('grupo-titulo');
     if (grupoTitulo) grupoTitulo.textContent = t('grupo_titulo');
     const grupoSubtitulo = document.getElementById('grupo-subtitulo');
@@ -363,6 +371,7 @@ function aplicarTraducao() {
     const grupoChatTitulo = document.getElementById('grupo-chat-titulo');
     if (grupoChatTitulo) grupoChatTitulo.textContent = t('grupo_chat_titulo');
 
+    // Aulas
     const aulasTitulo = document.getElementById('aulas-titulo');
     if (aulasTitulo) aulasTitulo.textContent = t('aulas_titulo');
     const aulasSubtitulo = document.getElementById('aulas-subtitulo');
@@ -372,6 +381,7 @@ function aplicarTraducao() {
     const aulasAddBtn = document.getElementById('aulas-add-btn');
     if (aulasAddBtn) aulasAddBtn.textContent = t('aulas_add_btn');
 
+    // Relatórios
     const relTitulo = document.getElementById('rel-titulo');
     if (relTitulo) relTitulo.textContent = t('rel_titulo');
     const relSubtitulo = document.getElementById('rel-subtitulo');
@@ -385,6 +395,7 @@ function aplicarTraducao() {
     const relRachaLabel = document.getElementById('rel-racha-label');
     if (relRachaLabel) relRachaLabel.textContent = t('rel_racha');
 
+    // Configurações
     const configTitulo = document.getElementById('config-titulo');
     if (configTitulo) configTitulo.textContent = t('config_titulo');
     const configSubtitulo = document.getElementById('config-subtitulo');
@@ -402,6 +413,7 @@ function aplicarTraducao() {
     const configAlterarSenha = document.getElementById('config-alterar-senha');
     if (configAlterarSenha) configAlterarSenha.textContent = t('config_alterar_senha');
 
+    // Idioma label
     const idiomaLabel = document.getElementById('idioma-label');
     if (idiomaLabel) idiomaLabel.textContent = idiomaAtual.toUpperCase();
 }
@@ -409,11 +421,9 @@ function aplicarTraducao() {
 function atualizarPlaceholderChat() {
     const input = document.getElementById('chat-input');
     if (!input) return;
-    if (modoPaiAtual === 'estudo') {
-        input.placeholder = t('chat_placeholder_estudo');
-    } else {
-        input.placeholder = t('chat_placeholder_cotidiano');
-    }
+    input.placeholder = modoPaiAtual === 'estudo'
+        ? t('chat_placeholder_estudo')
+        : t('chat_placeholder_cotidiano');
 }
 
 // ============================================================
@@ -755,7 +765,7 @@ async function enviarMensagem() {
 }
 
 // ============================================================
-// CHAMAR IA (CORRIGIDO: URL /api/groq e modelo mixtral)
+// CHAMAR IA (com prompts melhorados)
 // ============================================================
 async function chamarIA(pergunta) {
     const container = document.getElementById('chat-mensagens');
@@ -772,11 +782,12 @@ async function chamarIA(pergunta) {
         const modo = modoSelect ? modoSelect.value : 'smart';
         const modoPai = modoPaiAtual;
 
+        // --- PROMPTS MELHORADOS ---
         let promptBase = '';
         if (modoPai === 'estudo') {
-            promptBase = 'Você é o SiriusLearn no modo ESTUDO. Seja didático, aprofundado e use exemplos teóricos. Responda com clareza e organização.';
+            promptBase = `Você é o SiriusLearn no modo ESTUDO. Seja didático, aprofundado e use exemplos teóricos. Responda com clareza e organização. Estruture a resposta com títulos (usando <h4> ou <h5>), listas (<ul>), negritos (<strong>) e itálicos (<em>) para facilitar a leitura. Use HTML inline para formatação. Sempre que possível, relacione o conteúdo com aplicações práticas ou exercícios.`;
         } else {
-            promptBase = 'Você é o SiriusLearn no modo COTIDIANO. Seja prático, direto e use exemplos da vida real. Foque em soluções acionáveis.';
+            promptBase = `Você é o SiriusLearn no modo COTIDIANO. Seja prático, direto, com exemplos da vida real. Use uma linguagem clara, natural e acolhedora. Organize a resposta com títulos curtos, itálico para exemplos e negrito para destaques. Termine com uma pergunta ou chamada para ação. Formate a resposta usando HTML básico: <strong> para negrito, <em> para itálico, <ul> e <li> para listas. Use <br> para quebras de linha. Não use Markdown, apenas HTML inline.`;
         }
 
         const submodoMap = {
@@ -800,13 +811,13 @@ async function chamarIA(pergunta) {
             { role: 'user', content: pergunta }
         ];
 
-        // URL CORRETA: /api/groq (NÃO é /api/qroq)
+        // URL CORRETA: /api/groq
         const response = await fetch('/api/groq', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 messages: messages,
-                model: 'openai/gpt-oss-20b',  // <--- MODELO ESTÁVEL
+                model: 'mixtral-8x7b-32768',  // modelo estável
                 stream: true
             })
         });
@@ -879,6 +890,8 @@ async function getHistoricoConversa(conversaId) {
 }
 
 function formatarResposta(texto) {
+    // Se a IA já gerar HTML, só retorna o texto (evita dupla formatação)
+    // Mas se quiser manter markdown simples, pode deixar como está.
     return texto
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
