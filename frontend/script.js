@@ -17,7 +17,7 @@ let modoPaiAtual = 'estudo';
 let idiomaAtual = 'pt';
 
 // ============================================================
-// TRADUÇÕES (versão completa)
+// TRADUÇÕES (mantive completa para PT, EN, ES)
 // ============================================================
 const traducoes = {
     pt: {
@@ -413,7 +413,6 @@ function aplicarTraducao() {
     const configAlterarSenha = document.getElementById('config-alterar-senha');
     if (configAlterarSenha) configAlterarSenha.textContent = t('config_alterar_senha');
 
-    // Idioma label
     const idiomaLabel = document.getElementById('idioma-label');
     if (idiomaLabel) idiomaLabel.textContent = idiomaAtual.toUpperCase();
 }
@@ -765,7 +764,7 @@ async function enviarMensagem() {
 }
 
 // ============================================================
-// CHAMAR IA (com prompts melhorados)
+// CHAMAR IA (PROMPTS MELHORADOS - ESTUDO E COTIDIANO)
 // ============================================================
 async function chamarIA(pergunta) {
     const container = document.getElementById('chat-mensagens');
@@ -782,12 +781,52 @@ async function chamarIA(pergunta) {
         const modo = modoSelect ? modoSelect.value : 'smart';
         const modoPai = modoPaiAtual;
 
-        // --- PROMPTS MELHORADOS ---
+        // ============================================================
+        // PROMPT MODO ESTUDO (didático, aprofundado, com HTML)
+        // ============================================================
         let promptBase = '';
         if (modoPai === 'estudo') {
-            promptBase = `Você é o SiriusLearn no modo ESTUDO. Seja didático, aprofundado e use exemplos teóricos. Responda com clareza e organização. Estruture a resposta com títulos (usando <h4> ou <h5>), listas (<ul>), negritos (<strong>) e itálicos (<em>) para facilitar a leitura. Use HTML inline para formatação. Sempre que possível, relacione o conteúdo com aplicações práticas ou exercícios.`;
-        } else {
-            promptBase = `Você é o SiriusLearn no modo COTIDIANO. Seja prático, direto, com exemplos da vida real. Use uma linguagem clara, natural e acolhedora. Organize a resposta com títulos curtos, itálico para exemplos e negrito para destaques. Termine com uma pergunta ou chamada para ação. Formate a resposta usando HTML básico: <strong> para negrito, <em> para itálico, <ul> e <li> para listas. Use <br> para quebras de linha. Não use Markdown, apenas HTML inline.`;
+            promptBase = `Você é o SiriusLearn, tutor virtual especializado em estudos, no modo ESTUDO.
+
+**REGRAS OBRIGATÓRIAS:**
+1. Seja didático, aprofundado e use exemplos teóricos. Responda com clareza e organização.
+2. Sempre que possível, relacione o conteúdo com aplicações práticas ou exercícios.
+3. Use títulos (<h4> ou <h5>), listas (<ul>), negritos (<strong>) e itálicos (<em>) para facilitar a leitura.
+4. NUNCA use Markdown – apenas HTML inline.
+5. Ao final, sugira um exercício ou pergunta para fixação.
+
+**Exemplo de estrutura:**
+<h4>Título do tópico</h4>
+<p>Explicação clara e objetiva.</p>
+<ul>
+  <li><strong>Ponto 1:</strong> detalhe</li>
+  <li><strong>Ponto 2:</strong> detalhe</li>
+</ul>
+<em>Exemplo prático: ...</em>
+<br>
+<strong>Exercício:</strong> ...`;
+        }
+        // ============================================================
+        // PROMPT MODO COTIDIANO (prático, direto, sem perguntas de volta)
+        // ============================================================
+        else {
+            promptBase = `Você é o SiriusLearn, assistente inteligente e prático, no modo COTIDIANO.
+
+**REGRAS OBRIGATÓRIAS:**
+1. Responda SEMPRE à pergunta do usuário de forma completa e objetiva.
+2. NUNCA faça perguntas de volta, a menos que a pergunta seja extremamente vaga (ex: "me ajuda").
+3. Se a pergunta for sobre produtos ou decisões (ex: "vale a pena comprar X?"), dê uma análise com prós e contras, opinião embasada e sugestões de onde pesquisar mais.
+4. Use um tom claro, acolhedor e prático, como se estivesse conversando com um amigo.
+5. Estruture a resposta com:
+   - Títulos curtos (<h4>)
+   - Listas (<ul> e <li>) para prós/contras ou passos
+   - Negrito (<strong>) para destaques
+   - Itálico (<em>) para exemplos
+   - Quebras de linha (<br>) para separar parágrafos
+6. NUNCA use Markdown – apenas HTML inline.
+7. Termine com uma chamada para ação prática (ex: "Quer que eu compare com outro modelo?").
+
+**Lembre-se:** você é útil, direto e evita rodeios. Se não souber algo, diga claramente e sugira onde encontrar a informação.`;
         }
 
         const submodoMap = {
@@ -811,13 +850,15 @@ async function chamarIA(pergunta) {
             { role: 'user', content: pergunta }
         ];
 
-        // URL CORRETA: /api/groq
-        const response = await fetch('/api/groq', {
+        // ============================================================
+        // CHAMADA À API (URL E MODELO CORRETOS)
+        // ============================================================
+        const response = await fetch('/api/groq', {   // <--- URL CORRETA
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 messages: messages,
-                model: 'openai/gpt-oss-120b',  // modelo estável
+                model: 'openai/gpt-oss-120b',   // <--- MODELO ATIVO
                 stream: true
             })
         });
@@ -890,8 +931,7 @@ async function getHistoricoConversa(conversaId) {
 }
 
 function formatarResposta(texto) {
-    // Se a IA já gerar HTML, só retorna o texto (evita dupla formatação)
-    // Mas se quiser manter markdown simples, pode deixar como está.
+    // Se a IA já gerar HTML, essa função apenas complementa
     return texto
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
