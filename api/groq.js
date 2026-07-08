@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         messages,
-        model: model || 'openai/gpt-oss-120b',
+        model: model || 'openai/gpt-oss-120b',  // <--- FALLBACK ATIVO
         stream: stream || false,
         temperature: 0.7,
         max_tokens: 4096,
