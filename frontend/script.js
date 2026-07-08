@@ -263,7 +263,6 @@ function t(chave) {
 }
 
 function aplicarTraducao() {
-    // Login
     const loginSubtitle = document.getElementById('login-subtitle');
     if (loginSubtitle) loginSubtitle.textContent = t('login_subtitle');
     const loginBtnText = document.getElementById('login-btn-text');
@@ -674,8 +673,8 @@ async function carregarMensagens(conversaId) {
     } else {
         data.forEach(msg => {
             const div = document.createElement('div');
-            div.className = `mensagem ${msg.role === 'user' ? 'usuario' : 'ia'}`;
-            div.innerHTML = msg.texto;  // <--- CORRIGIDO: era msg.content
+            div.className = `mensagem ${msg.tipo === 'user' ? 'usuario' : 'ia'}`;
+            div.innerHTML = msg.texto;
             container.appendChild(div);
         });
     }
@@ -734,7 +733,7 @@ async function deletarConversa(id) {
 }
 
 // ============================================================
-// TÓPICOS DA CONVERSA (CORRIGIDO)
+// TÓPICOS DA CONVERSA (CORRIGIDO - usa 'tipo' em vez de 'role')
 // ============================================================
 async function carregarTopicos(conversaId) {
     const container = document.getElementById('lista-topicos');
@@ -748,9 +747,9 @@ async function carregarTopicos(conversaId) {
 
     const { data, error } = await supabaseClient
         .from('mensagens')
-        .select('texto')  // <--- CORRIGIDO: era 'content'
+        .select('texto')
         .eq('conversa_id', id)
-        .eq('role', 'user')
+        .eq('tipo', 'user')   // <--- CORRIGIDO: 'role' → 'tipo'
         .order('created_at', { ascending: false })
         .limit(20);
 
@@ -769,14 +768,14 @@ async function carregarTopicos(conversaId) {
     data.forEach(msg => {
         const div = document.createElement('div');
         div.className = 'topico-item';
-        const texto = msg.texto.substring(0, 50) + (msg.texto.length > 50 ? '...' : '');  // <--- CORRIGIDO: era msg.content
+        const texto = msg.texto.substring(0, 50) + (msg.texto.length > 50 ? '...' : '');
         div.textContent = texto;
         container.appendChild(div);
     });
 }
 
 // ============================================================
-// ENVIAR MENSAGEM
+// ENVIAR MENSAGEM (CORRIGIDO - usa 'tipo' e 'texto')
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     const btnEnviar = document.getElementById('btn-chat-enviar');
@@ -816,8 +815,8 @@ async function enviarMensagem() {
     
     await supabaseClient.from('mensagens').insert({
         conversa_id: conversaAtualId,
-        role: 'user',
-        texto: texto  // <--- CORRIGIDO: era content: texto
+        tipo: 'user',        // <--- CORRIGIDO: 'role' → 'tipo'
+        texto: texto
     });
     
     const conv = todasConversas.find(c => c.id === conversaAtualId);
@@ -884,12 +883,15 @@ async function chamarIA(pergunta) {
                     { role: 'system', content: promptFinal },
                     ...historico
                 ],
-                model: 'openai/gpt-oss-120b',
+                model: 'llama3-70b-8192',   // <--- CORRIGIDO: modelo compatível com Groq
                 stream: true
             })
         });
         
-        if (!response.ok) throw new Error('Erro na API');
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`API retornou status ${response.status}: ${errorText}`);
+        }
         
         indicator.remove();
         
@@ -926,8 +928,8 @@ async function chamarIA(pergunta) {
         
         await supabaseClient.from('mensagens').insert({
             conversa_id: conversaAtualId,
-            role: 'assistant',
-            texto: respostaCompleta  // <--- CORRIGIDO: era content: respostaCompleta
+            tipo: 'assistant',   // <--- CORRIGIDO: 'role' → 'tipo'
+            texto: respostaCompleta
         });
         
         mensagensCache[conversaAtualId] = null;
@@ -945,11 +947,12 @@ async function chamarIA(pergunta) {
 async function getHistoricoConversa(conversaId) {
     const { data } = await supabaseClient
         .from('mensagens')
-        .select('role, texto')  // <--- CORRIGIDO: era 'role, content'
+        .select('tipo, texto')   // <--- CORRIGIDO: 'role' → 'tipo', 'content' → 'texto'
         .eq('conversa_id', conversaId)
+        .eq('tipo', 'user')
         .order('created_at', { ascending: true })
         .limit(10);
-    return data?.map(m => ({ role: m.role, content: m.texto })) || [];
+    return data?.map(m => ({ role: m.tipo, content: m.texto })) || [];
 }
 
 function formatarResposta(texto) {
