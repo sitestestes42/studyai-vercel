@@ -875,75 +875,23 @@ async function chamarIA(pergunta) {
         
         const historico = await getHistoricoConversa(conversaAtualId);
         
+        // 🔥 CORREÇÃO: Inclui a pergunta atual
+        const messages = [
+            { role: 'system', content: promptFinal },
+            ...historico,
+            { role: 'user', content: pergunta }
+        ];
+        
         const response = await fetch('/api/groq', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                messages: [
-                    { role: 'system', content: promptFinal },
-                    ...historico
-                ],
-                model: 'qwen/qwen3.6-27b',   // <--- CORRIGIDO: modelo compatível com Groq
+                messages: messages,
+                model: 'llama-3.1-70b-versatile',
                 stream: true
             })
         });
         
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`API retornou status ${response.status}: ${errorText}`);
-        }
-        
-        indicator.remove();
-        
-        const msgIA = document.createElement('div');
-        msgIA.className = 'mensagem ia';
-        container.appendChild(msgIA);
-        container.scrollTop = container.scrollHeight;
-        
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let respostaCompleta = '';
-        
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            const chunk = decoder.decode(value);
-            const lines = chunk.split('\n').filter(line => line.trim());
-            for (const line of lines) {
-                if (line.startsWith('data: ')) {
-                    const json = line.substring(6);
-                    if (json === '[DONE]') continue;
-                    try {
-                        const parsed = JSON.parse(json);
-                        const delta = parsed.choices?.[0]?.delta?.content || '';
-                        if (delta) {
-                            respostaCompleta += delta;
-                            msgIA.innerHTML = formatarResposta(respostaCompleta);
-                            container.scrollTop = container.scrollHeight;
-                        }
-                    } catch (e) {}
-                }
-            }
-        }
-        
-        await supabaseClient.from('mensagens').insert({
-            conversa_id: conversaAtualId,
-            tipo: 'assistant',   // <--- CORRIGIDO: 'role' → 'tipo'
-            texto: respostaCompleta
-        });
-        
-        mensagensCache[conversaAtualId] = null;
-        
-    } catch (error) {
-        console.error('Erro na IA:', error);
-        indicator.remove();
-        const erroDiv = document.createElement('div');
-        erroDiv.className = 'mensagem ia';
-        erroDiv.textContent = '❌ Desculpe, ocorreu um erro ao processar sua pergunta. Tente novamente.';
-        container.appendChild(erroDiv);
-    }
-}
-
 async function getHistoricoConversa(conversaId) {
     const { data } = await supabaseClient
         .from('mensagens')
