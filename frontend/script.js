@@ -17,7 +17,7 @@ let modoPaiAtual = 'estudo';
 let idiomaAtual = 'pt';
 
 // ============================================================
-// TRADUÇÕES (apenas trecho reduzido para não alongar)
+// TRADUÇÕES
 // ============================================================
 const traducoes = {
     pt: {
@@ -97,8 +97,160 @@ const traducoes = {
         config_editar_nome: 'Alterar nome',
         config_alterar_senha: 'Alterar senha',
     },
-    en: { /* ... omitido para brevidade, mas pode copiar do código anterior */ },
-    es: { /* ... omitido */ }
+    en: {
+        login_subtitle: 'Your AI Study Assistant',
+        login_entrar: 'Sign In',
+        login_google: 'Sign in with Google',
+        login_cadastro: 'Create account',
+        login_recuperar: 'Forgot password',
+        btn_nova: 'New',
+        drawer_conversas: 'Conversations',
+        drawer_nova_conv: 'New conversation',
+        drawer_topicos: 'Conversation topics',
+        drawer_ferramentas: 'Tools',
+        drawer_estudo: 'Study',
+        drawer_flashcards: 'Flashcards',
+        drawer_redacao: 'Essay',
+        drawer_vestibulinho: 'Quiz',
+        drawer_grupo: 'Group',
+        drawer_aulas: 'Lessons',
+        drawer_relatorios: 'Reports',
+        drawer_configuracoes: 'Settings',
+        chat_status: 'Online',
+        chat_placeholder_estudo: 'Ask your study question...',
+        chat_placeholder_cotidiano: 'Ask about daily life...',
+        saudacao_titulo: 'Hello!',
+        saudacao_subtitulo: 'How can I help you today?',
+        modo_smart: '🧠 Smart',
+        modo_deeper: '🔬 Think Deeper',
+        modo_learn: '📚 Learn',
+        modo_search: '🌐 Search',
+        modo_pratico: '⚡ Practical',
+        modo_inspire: '💡 Inspire',
+        modo_explique: '📝 Explain',
+        modo_liste: '📋 List',
+        estudo_titulo: 'Study Session',
+        estudo_subtitulo: 'Focus, study and AI generates flashcards and quiz.',
+        estudo_iniciar: 'Start',
+        estudo_finalizar: 'Finish',
+        pos_estudo_titulo: 'What did you study?',
+        pos_gerar: 'Generate Flashcards & Quiz',
+        flashcards_titulo: 'Flashcards',
+        flashcards_subtitulo: 'Spaced repetition – review today!',
+        redacao_titulo: 'Essay Corrector',
+        redacao_subtitulo: 'Paste your essay and get ENEM-style correction.',
+        redacao_corrigir: 'Correct Essay',
+        vest_titulo: 'Quiz',
+        vest_subtitulo: '20 AI-generated questions.',
+        vest_gerar: 'Generate Quiz',
+        grupo_titulo: 'Study Group',
+        grupo_subtitulo: 'Study with friends, share progress.',
+        grupo_criar_titulo: 'Create Group',
+        grupo_criar_btn: 'Create',
+        grupo_entrar_titulo: 'Join Group',
+        grupo_entrar_btn: 'Join',
+        grupo_sair_btn: 'Leave Group',
+        grupo_membros_titulo: 'Members',
+        grupo_ranking_titulo: 'Ranking',
+        grupo_ranking_semanal: 'Weekly',
+        grupo_ranking_mensal: 'Monthly',
+        grupo_chat_titulo: 'Group Chat',
+        aulas_titulo: 'Lessons',
+        aulas_subtitulo: 'YouTube playlists to study.',
+        aulas_add_titulo: 'Add Lesson',
+        aulas_add_btn: 'Add',
+        rel_titulo: 'Reports',
+        rel_subtitulo: 'Track your progress.',
+        rel_total: 'Total minutes',
+        rel_sessoes: 'Sessions',
+        rel_flashcards: 'Flashcards',
+        rel_racha: 'Days streak',
+        config_titulo: 'Settings',
+        config_subtitulo: 'Customize your SiriusLearn experience.',
+        config_idioma_titulo: 'Language',
+        config_idioma_desc: 'Choose the interface and AI response language.',
+        config_conta_titulo: 'Account',
+        config_conta_desc: 'Manage your personal information.',
+        config_editar_nome: 'Change name',
+        config_alterar_senha: 'Change password',
+    },
+    es: {
+        login_subtitle: 'Tu IA de estudios',
+        login_entrar: 'Iniciar sesión',
+        login_google: 'Iniciar con Google',
+        login_cadastro: 'Crear cuenta',
+        login_recuperar: 'Olvidé contraseña',
+        btn_nova: 'Nueva',
+        drawer_conversas: 'Conversaciones',
+        drawer_nova_conv: 'Nueva conversación',
+        drawer_topicos: 'Temas de la conversación',
+        drawer_ferramentas: 'Herramientas',
+        drawer_estudo: 'Estudio',
+        drawer_flashcards: 'Tarjetas',
+        drawer_redacao: 'Redacción',
+        drawer_vestibulinho: 'Examen',
+        drawer_grupo: 'Grupo',
+        drawer_aulas: 'Clases',
+        drawer_relatorios: 'Informes',
+        drawer_configuracoes: 'Configuraciones',
+        chat_status: 'En línea',
+        chat_placeholder_estudo: 'Haz tu pregunta de estudio...',
+        chat_placeholder_cotidiano: 'Pregunta sobre la vida diaria...',
+        saudacao_titulo: '¡Hola!',
+        saudacao_subtitulo: '¿Cómo puedo ayudarte hoy?',
+        modo_smart: '🧠 Smart',
+        modo_deeper: '🔬 Piensa más',
+        modo_learn: '📚 Aprende',
+        modo_search: '🌐 Buscar',
+        modo_pratico: '⚡ Práctico',
+        modo_inspire: '💡 Inspírate',
+        modo_explique: '📝 Explica',
+        modo_liste: '📋 Lista',
+        estudo_titulo: 'Sesión de Estudio',
+        estudo_subtitulo: 'Enfócate, estudia y la IA genera tarjetas y examen.',
+        estudo_iniciar: 'Iniciar',
+        estudo_finalizar: 'Finalizar',
+        pos_estudo_titulo: '¿Qué estudiaste?',
+        pos_gerar: 'Generar Tarjetas y Examen',
+        flashcards_titulo: 'Tarjetas de Estudio',
+        flashcards_subtitulo: 'Repetición espaciada – ¡revisa hoy!',
+        redacao_titulo: 'Corrector de Redacción',
+        redacao_subtitulo: 'Pega tu redacción y recibe corrección estilo ENEM.',
+        redacao_corrigir: 'Corregir Redacción',
+        vest_titulo: 'Examen',
+        vest_subtitulo: '20 preguntas generadas por IA.',
+        vest_gerar: 'Generar Examen',
+        grupo_titulo: 'Grupo de Estudio',
+        grupo_subtitulo: 'Estudia con amigos, comparte progreso.',
+        grupo_criar_titulo: 'Crear Grupo',
+        grupo_criar_btn: 'Crear',
+        grupo_entrar_titulo: 'Unirse al Grupo',
+        grupo_entrar_btn: 'Unirse',
+        grupo_sair_btn: 'Salir del Grupo',
+        grupo_membros_titulo: 'Miembros',
+        grupo_ranking_titulo: 'Clasificación',
+        grupo_ranking_semanal: 'Semanal',
+        grupo_ranking_mensal: 'Mensual',
+        grupo_chat_titulo: 'Chat del Grupo',
+        aulas_titulo: 'Clases',
+        aulas_subtitulo: 'Listas de YouTube para estudiar.',
+        aulas_add_titulo: 'Agregar Clase',
+        aulas_add_btn: 'Agregar',
+        rel_titulo: 'Informes',
+        rel_subtitulo: 'Sigue tu evolución.',
+        rel_total: 'Minutos totales',
+        rel_sessoes: 'Sesiones',
+        rel_flashcards: 'Tarjetas',
+        rel_racha: 'Días seguidos',
+        config_titulo: 'Configuraciones',
+        config_subtitulo: 'Personaliza tu experiencia en SiriusLearn.',
+        config_idioma_titulo: 'Idioma',
+        config_idioma_desc: 'Elige el idioma de la interfaz y respuestas de IA.',
+        config_conta_titulo: 'Cuenta',
+        config_conta_desc: 'Gestiona tu información personal.',
+        config_editar_nome: 'Cambiar nombre',
+        config_alterar_senha: 'Cambiar contraseña',
+    }
 };
 
 function t(chave) {
@@ -106,16 +258,162 @@ function t(chave) {
 }
 
 function aplicarTraducao() {
-    // Função reduzida – você pode usar a anterior
-    // (Apenas para encurtar, mantenha a que você já tinha)
+    const loginSubtitle = document.getElementById('login-subtitle');
+    if (loginSubtitle) loginSubtitle.textContent = t('login_subtitle');
+    const loginBtnText = document.getElementById('login-btn-text');
+    if (loginBtnText) loginBtnText.textContent = t('login_entrar');
+    const loginGoogleText = document.getElementById('login-google-text');
+    if (loginGoogleText) loginGoogleText.textContent = t('login_google');
+    const linkCadastro = document.getElementById('link-cadastro');
+    if (linkCadastro) linkCadastro.textContent = t('login_cadastro');
+    const linkRecuperar = document.getElementById('link-recuperar');
+    if (linkRecuperar) linkRecuperar.textContent = t('login_recuperar');
+
+    const btnNovaText = document.getElementById('btn-nova-text');
+    if (btnNovaText) btnNovaText.textContent = t('btn_nova');
+
+    const drawerConversas = document.getElementById('drawer-conversas-titulo');
+    if (drawerConversas) drawerConversas.textContent = t('drawer_conversas');
+    const drawerNovaConv = document.getElementById('drawer-nova-conv');
+    if (drawerNovaConv) drawerNovaConv.textContent = t('drawer_nova_conv');
+    const drawerTopicos = document.getElementById('drawer-topicos-titulo');
+    if (drawerTopicos) drawerTopicos.textContent = t('drawer_topicos');
+    const drawerFerramentas = document.getElementById('drawer-ferramentas-titulo');
+    if (drawerFerramentas) drawerFerramentas.textContent = t('drawer_ferramentas');
+
+    document.querySelectorAll('.drawer-item').forEach(el => {
+        const span = el.querySelector('span');
+        if (span) {
+            const chave = el.dataset.tab;
+            const map = {
+                chat: 'Chat',
+                estudo: t('drawer_estudo'),
+                flashcards: t('drawer_flashcards'),
+                redacao: t('drawer_redacao'),
+                vestibulinho: t('drawer_vestibulinho'),
+                grupo: t('drawer_grupo'),
+                aulas: t('drawer_aulas'),
+                relatorios: t('drawer_relatorios'),
+                configuracoes: t('drawer_configuracoes')
+            };
+            span.textContent = map[chave] || chave;
+        }
+    });
+
+    const chatStatus = document.getElementById('chat-status-text');
+    if (chatStatus) chatStatus.textContent = t('chat_status');
+    const saudacaoTitulo = document.getElementById('saudacao-titulo');
+    if (saudacaoTitulo) saudacaoTitulo.textContent = t('saudacao_titulo');
+    const saudacaoSubtitulo = document.getElementById('saudacao-subtitulo');
+    if (saudacaoSubtitulo) saudacaoSubtitulo.textContent = t('saudacao_subtitulo');
+    atualizarPlaceholderChat();
+
+    atualizarModos();
+
+    document.querySelectorAll('[id^="estudo-"]').forEach(el => {
+        if (el.id === 'estudo-titulo') el.textContent = t('estudo_titulo');
+        else if (el.id === 'estudo-subtitulo') el.textContent = t('estudo_subtitulo');
+        else if (el.id === 'estudo-iniciar') el.textContent = t('estudo_iniciar');
+        else if (el.id === 'estudo-finalizar') el.textContent = t('estudo_finalizar');
+        else if (el.id === 'pos-estudo-titulo') el.textContent = t('pos_estudo_titulo');
+        else if (el.id === 'pos-gerar') el.textContent = t('pos_gerar');
+    });
+
+    const flashcardsTitulo = document.getElementById('flashcards-titulo');
+    if (flashcardsTitulo) flashcardsTitulo.textContent = t('flashcards_titulo');
+    const flashcardsSubtitulo = document.getElementById('flashcards-subtitulo');
+    if (flashcardsSubtitulo) flashcardsSubtitulo.textContent = t('flashcards_subtitulo');
+
+    const redacaoTitulo = document.getElementById('redacao-titulo');
+    if (redacaoTitulo) redacaoTitulo.textContent = t('redacao_titulo');
+    const redacaoSubtitulo = document.getElementById('redacao-subtitulo');
+    if (redacaoSubtitulo) redacaoSubtitulo.textContent = t('redacao_subtitulo');
+    const redacaoCorrigir = document.getElementById('redacao-corrigir');
+    if (redacaoCorrigir) redacaoCorrigir.textContent = t('redacao_corrigir');
+
+    const vestTitulo = document.getElementById('vest-titulo');
+    if (vestTitulo) vestTitulo.textContent = t('vest_titulo');
+    const vestSubtitulo = document.getElementById('vest-subtitulo');
+    if (vestSubtitulo) vestSubtitulo.textContent = t('vest_subtitulo');
+    const vestGerar = document.getElementById('vest-gerar');
+    if (vestGerar) vestGerar.textContent = t('vest_gerar');
+
+    const grupoTitulo = document.getElementById('grupo-titulo');
+    if (grupoTitulo) grupoTitulo.textContent = t('grupo_titulo');
+    const grupoSubtitulo = document.getElementById('grupo-subtitulo');
+    if (grupoSubtitulo) grupoSubtitulo.textContent = t('grupo_subtitulo');
+    const grupoCriarTitulo = document.getElementById('grupo-criar-titulo');
+    if (grupoCriarTitulo) grupoCriarTitulo.textContent = t('grupo_criar_titulo');
+    const grupoCriarBtn = document.getElementById('grupo-criar-btn');
+    if (grupoCriarBtn) grupoCriarBtn.textContent = t('grupo_criar_btn');
+    const grupoEntrarTitulo = document.getElementById('grupo-entrar-titulo');
+    if (grupoEntrarTitulo) grupoEntrarTitulo.textContent = t('grupo_entrar_titulo');
+    const grupoEntrarBtn = document.getElementById('grupo-entrar-btn');
+    if (grupoEntrarBtn) grupoEntrarBtn.textContent = t('grupo_entrar_btn');
+    const grupoSairBtn = document.getElementById('grupo-sair-btn');
+    if (grupoSairBtn) grupoSairBtn.textContent = t('grupo_sair_btn');
+    const grupoMembrosTitulo = document.getElementById('grupo-membros-titulo');
+    if (grupoMembrosTitulo) grupoMembrosTitulo.textContent = t('grupo_membros_titulo');
+    const grupoRankingTitulo = document.getElementById('grupo-ranking-titulo');
+    if (grupoRankingTitulo) grupoRankingTitulo.textContent = t('grupo_ranking_titulo');
+    const grupoRankingSemanal = document.getElementById('grupo-ranking-semanal');
+    if (grupoRankingSemanal) grupoRankingSemanal.textContent = t('grupo_ranking_semanal');
+    const grupoRankingMensal = document.getElementById('grupo-ranking-mensal');
+    if (grupoRankingMensal) grupoRankingMensal.textContent = t('grupo_ranking_mensal');
+    const grupoChatTitulo = document.getElementById('grupo-chat-titulo');
+    if (grupoChatTitulo) grupoChatTitulo.textContent = t('grupo_chat_titulo');
+
+    const aulasTitulo = document.getElementById('aulas-titulo');
+    if (aulasTitulo) aulasTitulo.textContent = t('aulas_titulo');
+    const aulasSubtitulo = document.getElementById('aulas-subtitulo');
+    if (aulasSubtitulo) aulasSubtitulo.textContent = t('aulas_subtitulo');
+    const aulasAddTitulo = document.getElementById('aulas-add-titulo');
+    if (aulasAddTitulo) aulasAddTitulo.textContent = t('aulas_add_titulo');
+    const aulasAddBtn = document.getElementById('aulas-add-btn');
+    if (aulasAddBtn) aulasAddBtn.textContent = t('aulas_add_btn');
+
+    const relTitulo = document.getElementById('rel-titulo');
+    if (relTitulo) relTitulo.textContent = t('rel_titulo');
+    const relSubtitulo = document.getElementById('rel-subtitulo');
+    if (relSubtitulo) relSubtitulo.textContent = t('rel_subtitulo');
+    const relTotalLabel = document.getElementById('rel-total-label');
+    if (relTotalLabel) relTotalLabel.textContent = t('rel_total');
+    const relSessoesLabel = document.getElementById('rel-sessoes-label');
+    if (relSessoesLabel) relSessoesLabel.textContent = t('rel_sessoes');
+    const relFlashcardsLabel = document.getElementById('rel-flashcards-label');
+    if (relFlashcardsLabel) relFlashcardsLabel.textContent = t('rel_flashcards');
+    const relRachaLabel = document.getElementById('rel-racha-label');
+    if (relRachaLabel) relRachaLabel.textContent = t('rel_racha');
+
+    const configTitulo = document.getElementById('config-titulo');
+    if (configTitulo) configTitulo.textContent = t('config_titulo');
+    const configSubtitulo = document.getElementById('config-subtitulo');
+    if (configSubtitulo) configSubtitulo.textContent = t('config_subtitulo');
+    const configIdiomaTitulo = document.getElementById('config-idioma-titulo');
+    if (configIdiomaTitulo) configIdiomaTitulo.textContent = t('config_idioma_titulo');
+    const configIdiomaDesc = document.getElementById('config-idioma-desc');
+    if (configIdiomaDesc) configIdiomaDesc.textContent = t('config_idioma_desc');
+    const configContaTitulo = document.getElementById('config-conta-titulo');
+    if (configContaTitulo) configContaTitulo.textContent = t('config_conta_titulo');
+    const configContaDesc = document.getElementById('config-conta-desc');
+    if (configContaDesc) configContaDesc.textContent = t('config_conta_desc');
+    const configEditarNome = document.getElementById('config-editar-nome');
+    if (configEditarNome) configEditarNome.textContent = t('config_editar_nome');
+    const configAlterarSenha = document.getElementById('config-alterar-senha');
+    if (configAlterarSenha) configAlterarSenha.textContent = t('config_alterar_senha');
+
+    const idiomaLabel = document.getElementById('idioma-label');
+    if (idiomaLabel) idiomaLabel.textContent = idiomaAtual.toUpperCase();
 }
 
 function atualizarPlaceholderChat() {
     const input = document.getElementById('chat-input');
     if (!input) return;
-    input.placeholder = modoPaiAtual === 'estudo' 
-        ? t('chat_placeholder_estudo') 
-        : t('chat_placeholder_cotidiano');
+    if (modoPaiAtual === 'estudo') {
+        input.placeholder = t('chat_placeholder_estudo');
+    } else {
+        input.placeholder = t('chat_placeholder_cotidiano');
+    }
 }
 
 // ============================================================
@@ -155,6 +453,20 @@ function atualizarModos() {
     select.value = opcoes[0];
     atualizarPlaceholderChat();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.getElementById('toggle-modo-pai');
+    if (toggle) {
+        toggle.addEventListener('change', function() {
+            modoPaiAtual = this.checked ? 'cotidiano' : 'estudo';
+            atualizarModos();
+            const estudoLabel = document.getElementById('modo-estudo-label');
+            const cotidianoLabel = document.getElementById('modo-cotidiano-label');
+            if (estudoLabel) estudoLabel.style.color = this.checked ? 'var(--text-muted)' : 'var(--cor-primaria)';
+            if (cotidianoLabel) cotidianoLabel.style.color = this.checked ? 'var(--cor-primaria)' : 'var(--text-muted)';
+        });
+    }
+});
 
 // ============================================================
 // AUTENTICAÇÃO
@@ -358,7 +670,7 @@ async function deletarConversa(id) {
 }
 
 // ============================================================
-// TÓPICOS (corrigido)
+// TÓPICOS
 // ============================================================
 async function carregarTopicos(conversaId) {
     const container = document.getElementById('lista-topicos');
@@ -394,7 +706,7 @@ async function carregarTopicos(conversaId) {
 }
 
 // ============================================================
-// ENVIAR MENSAGEM (corrigido)
+// ENVIAR MENSAGEM
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('btn-chat-enviar')?.addEventListener('click', enviarMensagem);
@@ -443,7 +755,7 @@ async function enviarMensagem() {
 }
 
 // ============================================================
-// CHAMAR IA (corrigido – inclui pergunta e usa /api/groq)
+// CHAMAR IA (CORRIGIDO: URL /api/groq e modelo mixtral)
 // ============================================================
 async function chamarIA(pergunta) {
     const container = document.getElementById('chat-mensagens');
@@ -480,23 +792,21 @@ async function chamarIA(pergunta) {
 
         const promptFinal = `${promptBase} ${submodoMap[modo] || ''} Responda em ${idiomaAtual === 'pt' ? 'português' : idiomaAtual === 'en' ? 'inglês' : 'espanhol'}.`;
 
-        // Busca histórico (mensagens anteriores)
         const historico = await getHistoricoConversa(conversaAtualId);
 
-        // Monta mensagens: system + histórico + pergunta atual
         const messages = [
             { role: 'system', content: promptFinal },
             ...historico,
             { role: 'user', content: pergunta }
         ];
 
-        // URL CORRETA: /api/groq (não /api/qroq)
+        // URL CORRETA: /api/groq (NÃO é /api/qroq)
         const response = await fetch('/api/groq', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 messages: messages,
-                model: 'llama-3.1-70b-versatile',
+                model: 'mixtral-8x7b-32768',  // <--- MODELO ESTÁVEL
                 stream: true
             })
         });
@@ -578,7 +888,7 @@ function formatarResposta(texto) {
 }
 
 // ============================================================
-// DEMAIS FUNÇÕES (Configurações, Drawer, Timer)
+// CONFIGURAÇÕES, DRAWER E TIMER
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     // Configurações
