@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         messages,
-        model: model || 'qwen/qwen3.6-27b',
+        model: model || 'mixtral-8x7b-32768',  // <--- FALLBACK CORRIGIDO
         stream: stream || false,
         temperature: 0.7,
         max_tokens: 4096,
