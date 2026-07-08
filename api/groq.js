@@ -1,12 +1,10 @@
 export default async function handler(req, res) {
-  // Apenas POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
   const { messages, model, stream } = req.body;
 
-  // Validação básica
   if (!messages || !Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'Campo "messages" é obrigatório e deve ser um array não vazio.' });
   }
@@ -14,7 +12,7 @@ export default async function handler(req, res) {
   try {
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
-      console.error('ERRO: GROQ_API_KEY não definida nas variáveis de ambiente.');
+      console.error('ERRO: GROQ_API_KEY não definida.');
       return res.status(500).json({ error: 'Configuração da API ausente.' });
     }
 
@@ -36,7 +34,7 @@ export default async function handler(req, res) {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Erro da Groq:', errorText);
-      return res.status(response.status).json({ 
+      return res.status(response.status).json({
         error: 'Erro na API da Groq',
         details: errorText,
         status: response.status
@@ -44,20 +42,16 @@ export default async function handler(req, res) {
     }
 
     if (stream) {
-      // Stream da resposta
       res.setHeader('Content-Type', 'text/event-stream');
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Connection', 'keep-alive');
-      
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      
       try {
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-          const chunk = decoder.decode(value);
-          res.write(chunk);
+          res.write(decoder.decode(value));
         }
         res.end();
       } catch (streamError) {
@@ -65,7 +59,6 @@ export default async function handler(req, res) {
         res.end();
       }
     } else {
-      // Resposta normal JSON
       const data = await response.json();
       return res.status(200).json(data);
     }
