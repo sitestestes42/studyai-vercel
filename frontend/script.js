@@ -806,7 +806,7 @@ async function chamarIA(pergunta) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 messages: messages,
-                model: 'mixtral-8x7b-32768',  // <--- MODELO ESTÁVEL
+                model: 'openai/gpt-oss-20b',  // <--- MODELO ESTÁVEL
                 stream: true
             })
         });
