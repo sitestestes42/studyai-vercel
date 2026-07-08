@@ -883,7 +883,7 @@ async function chamarIA(pergunta) {
                     { role: 'system', content: promptFinal },
                     ...historico
                 ],
-                model: 'llama3-70b-8192',   // <--- CORRIGIDO: modelo compatível com Groq
+                model: 'qwen/qwen3.6-27b',   // <--- CORRIGIDO: modelo compatível com Groq
                 stream: true
             })
         });
