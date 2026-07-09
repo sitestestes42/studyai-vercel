@@ -17,7 +17,7 @@ let modoPaiAtual = 'estudo';
 let idiomaAtual = 'pt';
 
 // ============================================================
-// TRADUÇÕES (mantive completa para PT, EN, ES)
+// TRADUÇÕES (PT, EN, ES)
 // ============================================================
 const traducoes = {
     pt: {
@@ -764,7 +764,7 @@ async function enviarMensagem() {
 }
 
 // ============================================================
-// CHAMAR IA (PROMPTS MELHORADOS - ESTUDO E COTIDIANO)
+// CHAMAR IA (COM HISTÓRICO COMPLETO E PROMPTS MELHORADOS)
 // ============================================================
 async function chamarIA(pergunta) {
     const container = document.getElementById('chat-mensagens');
@@ -781,9 +781,7 @@ async function chamarIA(pergunta) {
         const modo = modoSelect ? modoSelect.value : 'smart';
         const modoPai = modoPaiAtual;
 
-        // ============================================================
-        // PROMPT MODO ESTUDO (didático, aprofundado, com HTML)
-        // ============================================================
+        // ========= PROMPT MODO ESTUDO =========
         let promptBase = '';
         if (modoPai === 'estudo') {
             promptBase = `Você é o SiriusLearn, tutor virtual especializado em estudos, no modo ESTUDO.
@@ -806,27 +804,27 @@ async function chamarIA(pergunta) {
 <br>
 <strong>Exercício:</strong> ...`;
         }
-        // ============================================================
-        // PROMPT MODO COTIDIANO (prático, direto, sem perguntas de volta)
-        // ============================================================
+        // ========= PROMPT MODO COTIDIANO (SEM PERGUNTAS DE VOLTA) =========
         else {
-            promptBase = `Você é o SiriusLearn, assistente inteligente e prático, no modo COTIDIANO.
+            promptBase = `Você é o SiriusLearn, assistente prático e direto, no modo COTIDIANO.
 
-**REGRAS OBRIGATÓRIAS:**
-1. Responda SEMPRE à pergunta do usuário de forma completa e objetiva.
-2. NUNCA faça perguntas de volta, a menos que a pergunta seja extremamente vaga (ex: "me ajuda").
-3. Se a pergunta for sobre produtos ou decisões (ex: "vale a pena comprar X?"), dê uma análise com prós e contras, opinião embasada e sugestões de onde pesquisar mais.
-4. Use um tom claro, acolhedor e prático, como se estivesse conversando com um amigo.
-5. Estruture a resposta com:
-   - Títulos curtos (<h4>)
-   - Listas (<ul> e <li>) para prós/contras ou passos
-   - Negrito (<strong>) para destaques
-   - Itálico (<em>) para exemplos
-   - Quebras de linha (<br>) para separar parágrafos
-6. NUNCA use Markdown – apenas HTML inline.
-7. Termine com uma chamada para ação prática (ex: "Quer que eu compare com outro modelo?").
+**REGRAS ABSOLUTAS (NUNCA QUEBRE):**
+1. Responda à pergunta do usuário de forma COMPLETA e DIRETA na PRIMEIRA mensagem.
+2. NUNCA faça perguntas de volta, a menos que a pergunta seja literalmente "me ajuda" ou "não sei o que perguntar".
+3. NUNCA pergunte "Quer que eu compare?", "Posso ajudar com mais algo?", "Como posso ajudar?" ou similares.
+4. Se a pergunta for sobre um produto (ex: "vale a pena comprar X?"), dê uma análise com prós, contras, opinião e recomendações. Termine com uma sugestão prática, mas SEM perguntar se a pessoa quer mais ajuda.
+5. Use HTML inline: <strong> para negrito, <em> para itálico, <ul> e <li> para listas, <br> para quebras.
+6. NUNCA use Markdown.
 
-**Lembre-se:** você é útil, direto e evita rodeios. Se não souber algo, diga claramente e sugira onde encontrar a informação.`;
+**EXEMPLO DE RESPOSTA PROIBIDA:**
+❌ "Quer que eu compare com outro modelo?"
+❌ "Como posso ajudar?"
+❌ "Precisa de mais informações?"
+
+**EXEMPLO DE RESPOSTA CORRETA:**
+✅ "Aqui está minha análise sobre o Echo Dot 8... (prós, contras, opinião). Se quiser, você mesmo pode pesquisar comparativos no YouTube."
+
+**Lembre-se:** você é útil, direto e não faz perguntas de volta.`;
         }
 
         const submodoMap = {
@@ -842,8 +840,12 @@ async function chamarIA(pergunta) {
 
         const promptFinal = `${promptBase} ${submodoMap[modo] || ''} Responda em ${idiomaAtual === 'pt' ? 'português' : idiomaAtual === 'en' ? 'inglês' : 'espanhol'}.`;
 
+        // ============================================================
+        // BUSCA HISTÓRICO COMPLETO (user + assistant)
+        // ============================================================
         const historico = await getHistoricoConversa(conversaAtualId);
 
+        // Monta messages com histórico + pergunta atual
         const messages = [
             { role: 'system', content: promptFinal },
             ...historico,
@@ -853,12 +855,12 @@ async function chamarIA(pergunta) {
         // ============================================================
         // CHAMADA À API (URL E MODELO CORRETOS)
         // ============================================================
-        const response = await fetch('/api/groq', {   // <--- URL CORRETA
+        const response = await fetch('/api/groq', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 messages: messages,
-                model: 'openai/gpt-oss-120b',   // <--- MODELO ATIVO
+                model: 'openai/gpt-oss-120b',
                 stream: true
             })
         });
@@ -919,19 +921,31 @@ async function chamarIA(pergunta) {
     }
 }
 
+// ============================================================
+// FUNÇÃO HISTÓRICO (CORRIGIDA – busca user e assistant)
+// ============================================================
 async function getHistoricoConversa(conversaId) {
-    const { data } = await supabaseClient
+    const { data, error } = await supabaseClient
         .from('mensagens')
         .select('tipo, texto')
         .eq('conversa_id', conversaId)
-        .eq('tipo', 'user')
-        .order('created_at', { ascending: true })
-        .limit(10);
-    return data?.map(m => ({ role: m.tipo, content: m.texto })) || [];
+        .order('created_at', { ascending: true })   // mais antiga primeiro
+        .limit(20);   // últimas 20 mensagens
+
+    if (error) {
+        console.error('Erro ao buscar histórico:', error);
+        return [];
+    }
+
+    // Converte para o formato esperado pela API
+    return data?.map(m => ({
+        role: m.tipo === 'user' ? 'user' : 'assistant',
+        content: m.texto
+    })) || [];
 }
 
 function formatarResposta(texto) {
-    // Se a IA já gerar HTML, essa função apenas complementa
+    // Se a IA já gerar HTML, complementa apenas markdown simples
     return texto
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
